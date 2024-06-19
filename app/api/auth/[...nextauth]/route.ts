@@ -1,3 +1,4 @@
+"use server";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import CryptoJS from "crypto-js";
@@ -8,7 +9,7 @@ const handler = NextAuth({
     // credentials는 인증 방식 선택 email과 비밀번호로 사용
     CredentialsProvider({
       // 여기서 입력한 이름을 sign("이름") 형태로 사용
-      name: "email-password-credential",
+      name: "credentials",
       // 여기서 작성한 타입 그대로 아래 "authorize()"의 "credentials"의 타입 적용
       // 또한 "next-auth"에서 생성해주는 로그인창에서 사용 ( http://localhost:3000/api/auth/signin )
       credentials: {
@@ -24,8 +25,9 @@ const handler = NextAuth({
         },
       },
       //로그인 유효성 검사
-      // 로그인 요청인 "signIn("credentials", { id, password })"에서 넣어준 "id", "password"값이 그대로 들어옴
-      async authorize(credentials): Promise<any> {
+      // 로그인 요청인 "signIn("credentials", { email, password })"에서 넣어준 "id", "password"값이 그대로 들어옴
+      async authorize(credentials) {
+        console.log(credentials);
         //credentials가 false라면 에러 던짐(아마 빈값일 듯 확인해보고 주석 없애자.)
         if (!credentials) {
           throw new Error("잘못된 입력값입니다.");
