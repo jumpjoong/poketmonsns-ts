@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import React, { useRef, useState } from "react";
 import style from "@/app/(route)/sign/sign.module.scss";
 
@@ -10,7 +10,6 @@ export default function Home() {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const [formStatus, setFormStatus] = useState();
-
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -36,10 +35,22 @@ export default function Home() {
   };
 
   if (status === "authenticated") {
-    console.log(
-      "sign페이지 접속 시 로그인 여부 확인 후 인증 됐다면 maind으로 이동"
+    //로그인 상태라면 아마 main컴포넌트를 하나 만들어서 거기서 작업해야할듯
+    //(route폴더에는 main만 있으면 끝 나머지는 components로 빼면 됨)
+    return (
+      <main className={style.sign_main}>
+        <div className={style.sign_form_box}>
+          <p>Welcome, {session.user?.email}</p>
+          <button
+            onClick={() => {
+              signOut();
+            }}
+          >
+            로그아웃
+          </button>
+        </div>
+      </main>
     );
-    // location.replace("/");
   } else if (status === "unauthenticated") {
     //로그인 상태가 아니라면 밑의 코드를 보여줌
     return (
@@ -64,8 +75,6 @@ export default function Home() {
                 name="password"
                 autoComplete="off"
               ></input>
-
-              <span>{formStatus}</span>
             </p>
             <p>
               <input type="submit" value="로그인" />

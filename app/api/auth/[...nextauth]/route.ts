@@ -3,6 +3,7 @@ import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import CryptoJS from "crypto-js";
 import prisma from "@/prisma/prisma";
+import { User } from "next-auth";
 
 const handler = NextAuth({
   providers: [
@@ -16,19 +17,15 @@ const handler = NextAuth({
         email: {
           label: "Email",
           type: "email",
-          placeholder: "email@email.com",
         },
         password: {
           label: "Password",
           type: "password",
-          placeholder: "password",
         },
       },
       //로그인 유효성 검사
       // 로그인 요청인 "signIn("credentials", { email, password })"에서 넣어준 "id", "password"값이 그대로 들어옴
-      async authorize(credentials) {
-        console.log(credentials);
-        //credentials가 false라면 에러 던짐(아마 빈값일 듯 확인해보고 주석 없애자.)
+      authorize: async credentials => {
         if (!credentials) {
           throw new Error("잘못된 입력값입니다.");
         }
@@ -38,23 +35,39 @@ const handler = NextAuth({
             email: email,
           },
           select: {
+            id: true,
             email: true,
             password: true,
+            name: true,
+            pro_img: true,
           },
         });
+        if (!user) {
+          throw new Error("Could not find user");
+        }
         // const bb = JSON.parse(CryptoJS.AES.decrypt(user.password, process.env.NEXT_PUBLIC_SECRET_KEY).toString(CryptoJS.enc.Utf8));
         const encryptedPassword: string = CryptoJS.AES.decrypt(
-          password,
+          user.password,
           process.env.NEXT_PUBLIC_SECRET_KEY
         ).toString(CryptoJS.enc.Utf8);
-        if (encryptedPassword === credentials?.password) {
-          return user;
+
+        if (encryptedPassword === password) {
+          const authenticatedUser: User = {
+            id: user.id.toString(),
+            email: user.email,
+            name: user.name || null,
+            image: null,
+          };
+          return authenticatedUser;
         } else {
           throw new Error("Could not log you in");
         }
       },
     }),
   ],
+  // pages: {
+  //   signOut: "/",
+  // },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token }) {
@@ -70,23 +83,25 @@ const handler = NextAuth({
         where: {
           email: session.user.email,
         },
-        select: {
-          id: true,
-        },
+        select: { id: true, email: true, name: true, pro_img: true },
       });
 
       // 로그인한 유저 데이터 재정의
       // 단, 기존에 "user"의 형태가 정해져있기 때문에 변경하기 위해서는 타입 재정의가 필요함
-      // session.user = exUser;
       //exUser = { id : 1 }
       //session.user = {name:undefined, email:1234@1234, image:undefined,}
-      console.log("exuser 에러", exUser);
-      console.log("session.USER 에러", session.user);
-
+      if (exUser) {
+        session.user = {
+          id: exUser.id.toString(),
+          email: exUser.email,
+          name: exUser.name,
+          image: null,
+        };
+      }
       // 여기서 반환한 session값이 "useSession()"의 "data"값이 됨
       return session;
     },
   },
 });
 
-export { handler as GET, handler as Post };
+export { handler as GET, handler as POST };
