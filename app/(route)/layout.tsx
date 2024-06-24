@@ -1,5 +1,5 @@
-import "./globals.css";
-import AuthProvider from "./lib/next-auth";
+"use client";
+import AuthProvider from "../_lib/next-auth/index";
 
 export default function RootLayout({
   children,

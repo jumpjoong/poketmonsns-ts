@@ -16,6 +16,7 @@ model user_table {
   credit     Int    @default(0)
   rep        Int    @default(0)
   badge_list String @default(",,,,,")
+  posts      list_table[]
 }
 
 model poke_table {
@@ -46,6 +47,7 @@ model list_table {
   content    String
   date       DateTime @default(now())
   like_count Int      @default(0)
+  author user_table @relation(fields: [user_id], references: [id])
 }
 
 model favorite_table {
