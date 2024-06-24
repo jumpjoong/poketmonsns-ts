@@ -12,6 +12,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    // "outDir": "./dist",
+    // "rootDir": "./app",
     "plugins": [
       {
         "name": "next"
@@ -19,7 +21,6 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./*"],
       "@/app/*": ["app/*"],
       "@/components/*": ["app/components/*"]
     }
