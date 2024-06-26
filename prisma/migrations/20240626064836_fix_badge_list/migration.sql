@@ -7,7 +7,7 @@ CREATE TABLE `user_table` (
     `password` VARCHAR(191) NOT NULL,
     `credit` INTEGER NOT NULL DEFAULT 0,
     `rep` INTEGER NOT NULL DEFAULT 0,
-    `badge_list` VARCHAR(191) NOT NULL DEFAULT '',
+    `badge_list` JSON NULL,
 
     UNIQUE INDEX `user_table_email_key`(`email`),
     PRIMARY KEY (`id`)
@@ -55,6 +55,7 @@ CREATE TABLE `list_table` (
     `like_count` INTEGER NOT NULL DEFAULT 0,
 
     UNIQUE INDEX `list_table_id_key`(`id`),
+    INDEX `list_table_user_id_fkey`(`user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

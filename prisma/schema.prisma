@@ -15,7 +15,7 @@ model user_table {
   password   String
   credit     Int          @default(0)
   rep        Int          @default(0)
-  badge_list String       @default(",,,,,")
+  badge_list Json?       
   posts      list_table[]
 }
 

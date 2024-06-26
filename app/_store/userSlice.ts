@@ -7,7 +7,7 @@ interface User {
   email: string;
   credit: number;
   rep: number;
-  badge_list: number[];
+  badge_list: [];
 }
 //유저 정보 가져오기
 export const fetchUser = createAsyncThunk(
