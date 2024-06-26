@@ -26,7 +26,6 @@ export async function GET(
         },
       },
     });
-    console.log(userPosts);
     return new Response(JSON.stringify(userPosts));
   } catch (error) {
     console.error("Error handling request:", error);
