@@ -1,6 +1,6 @@
 "use client";
 import AuthProvider from "../_lib/next-auth/index";
-
+import "../_styles/global.scss";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -8,9 +8,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <head>
-        <title>여길 바꾸면 됨</title>
-      </head>
       <body>
         <AuthProvider>{children}</AuthProvider>
       </body>

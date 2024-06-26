@@ -1,10 +1,8 @@
 "use client";
 
 import { signIn, useSession } from "next-auth/react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import style from "@/app/_styles/sign.module.scss";
-import axios from "axios";
-import MainComponents from "./main/_components/MainComponents";
 
 export default function Home() {
   //session을 없애면 에러가 나옴 구조 분해 할당으로 인해서?
@@ -37,7 +35,9 @@ export default function Home() {
           }),
         });
         const res = await register.json();
-        setErrorHandling(res.message);
+        setloginRegister(!loginRegister);
+        setEmail("");
+        setPw("");
       } catch (error) {
         console.log(error);
       }
@@ -63,10 +63,10 @@ export default function Home() {
     setPw("");
   };
 
-  // if (session) {
-  //   location.replace("/main");
-  //   return null
-  // }
+  if (session) {
+    location.replace("/main");
+    return null;
+  }
   return (
     <main className={style.sign_main}>
       <div className={style.sign_form_box}>

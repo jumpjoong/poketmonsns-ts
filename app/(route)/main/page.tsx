@@ -3,10 +3,8 @@
 import React from "react";
 import MainComponents from "./_components/MainComponents";
 
-function main() {
-  //session: undefined, null
-  //status: authenticated, loading, unauthenticated
+function Main() {
   return <MainComponents />;
 }
 
-export default main;
+export default Main;
