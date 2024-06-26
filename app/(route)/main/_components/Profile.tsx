@@ -5,10 +5,8 @@ import { useAppSelector } from "@/app/_hooks/hooks";
 import { signOut } from "next-auth/react";
 function Profile() {
   const user = useAppSelector(state => state.user.user);
-  const proImg = useAppSelector(state => state.user.user);
   const [badgeModModal, setBadgeModModal] = useState();
   const [mylist, setMylist] = useState([]);
-  const [test, setTest] = useState([]);
   const BadgeFunc = (key: number) => {
     console.log(key);
   };
@@ -27,7 +25,6 @@ function Profile() {
   const followBtnClick = () => {
     // if (pageStatus !== "NEWBIE") setPageStatus("FOLLOW");
   };
-  console.log(user?.badge_list);
   return (
     <>
       {user && (
@@ -64,7 +61,7 @@ function Profile() {
               <div className={style.profile_badge_wrap}>
                 {user.badge_list &&
                   user.badge_list.map((badge, key) => {
-                    return badge === "" ? (
+                    return badge === null ? (
                       <div
                         key={key}
                         className={style.profile_badge_img_wrap}
@@ -130,7 +127,13 @@ function Profile() {
             <div className={style.profile_menu_wrap}>
               <p onClick={profileBtnClick}>프로필 수정</p>
               <p onClick={followBtnClick}>팔로우</p>
-              <p onClick={() => signOut()}>로그아웃</p>
+              <p
+                onClick={() => {
+                  signOut({ callbackUrl: "/", redirect: true });
+                }}
+              >
+                로그아웃
+              </p>
             </div>
           </div>
           <div className={style.rep_wrap}>
