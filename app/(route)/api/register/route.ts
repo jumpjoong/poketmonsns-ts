@@ -1,7 +1,6 @@
-import { NextResponse } from "next/server";
 import prisma from "../../../../prisma/prisma";
-import { json } from "stream/consumers";
 const bcrypt = require("bcrypt");
+
 interface RequestBody {
   email: string;
   password: string;
@@ -9,7 +8,7 @@ interface RequestBody {
 export async function POST(req: Request, res: Response) {
   const body: RequestBody = await req.json();
   //중복 이메일 있는지 검사
-  const user = await prisma.user_table.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       email: body.email,
     },
@@ -20,7 +19,7 @@ export async function POST(req: Request, res: Response) {
       { status: 422 }
     );
   } else {
-    const createrUser = await prisma.user_table.create({
+    const createrUser = await prisma.user.create({
       data: {
         name: "",
         pro_img: "000",

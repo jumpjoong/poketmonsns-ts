@@ -22,7 +22,7 @@
     "baseUrl": "./",
     "paths": {
       "@/app/*": ["app/*"],
-      "@/components/*": ["app/components/*"]
+      "@/_styles/*": ["app/_styles/*"]
     }
   },
   "include": [

@@ -1,10 +1,15 @@
 "use client";
 
 import React from "react";
-import MainComponents from "./_components/MainContents";
+import MainContents from "./_components/MainContents/MainContents";
+import style from "../../_styles/mainContentsWrap.module.scss";
 
 function Main() {
-  return <MainComponents />;
+  return (
+    <div className={style.main_contents_wrap}>
+      <MainContents />;
+    </div>
+  );
 }
 
 export default Main;

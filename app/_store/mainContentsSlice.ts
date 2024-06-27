@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const mainContentsSlice = createSlice({
   name: "mainContents",
-  initialState: "POSTS",
+  initialState: "",
   reducers: {
     selectsPost: () => "POSTS",
     selectsTrend: () => "TREND",

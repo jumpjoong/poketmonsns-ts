@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import prisma from "../../../../prisma/prisma";
 import { signJwtAccessToken } from "@/app/_lib/jwt/jwt";
 const bcrypt = require("bcrypt");
@@ -11,7 +10,7 @@ interface RequestBody {
 export async function POST(request: Request) {
   const body: RequestBody = await request.json();
   //해당 이메일에 해당하는 user정보 중 첫번 째를 찾음
-  const user = await prisma.user_table.findFirst({
+  const user = await prisma.user.findFirst({
     where: {
       email: body.email,
     },
