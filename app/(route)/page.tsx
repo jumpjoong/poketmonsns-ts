@@ -27,7 +27,7 @@ export default function Home() {
     if (loginRegister) {
       //회원가입
       try {
-        const register = await fetch(`http://localhost:3000/api/register`, {
+        const register = await fetch(`/api/register`, {
           method: "POST",
           body: JSON.stringify({
             email: email,
@@ -62,7 +62,6 @@ export default function Home() {
     setEmail("");
     setPw("");
   };
-
   if (session) {
     location.replace("/main");
     return null;

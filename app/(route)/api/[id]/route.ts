@@ -13,7 +13,7 @@ export async function GET(
       });
     }
     const id = Number(params.id);
-    const userPosts = await prisma.list_table.findMany({
+    const userPosts = await prisma.posts.findMany({
       where: {
         user_id: id,
       },

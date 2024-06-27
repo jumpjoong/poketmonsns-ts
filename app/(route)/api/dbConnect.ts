@@ -12,13 +12,16 @@ const pool: Pool = createPool({
 
 pool.getConnection((err: MysqlError, connection: PoolConnection) => {
   try {
-    console.log("연결 성공");
+    return new Response();
   } catch {
     console.log(err, "연결 실패");
   }
 });
 
-const executeQuery = async (query: string, arraParams: any[]): Promise<any> => {
+export const executeQuery = async (
+  query: string,
+  arraParams: any[]
+): Promise<any> => {
   return await new Promise((resolve, reject) => {
     pool.query(query, arraParams, (err, data) => {
       if (err) {
@@ -29,4 +32,3 @@ const executeQuery = async (query: string, arraParams: any[]): Promise<any> => {
     });
   });
 };
-module.exports = { executeQuery };

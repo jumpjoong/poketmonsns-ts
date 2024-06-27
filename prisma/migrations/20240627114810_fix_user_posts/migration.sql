@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE `user_table` (
+CREATE TABLE `user` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `pro_img` VARCHAR(191) NOT NULL DEFAULT '000',
     `name` VARCHAR(191) NOT NULL DEFAULT '',
@@ -9,7 +9,7 @@ CREATE TABLE `user_table` (
     `rep` INTEGER NOT NULL DEFAULT 0,
     `badge_list` JSON NULL,
 
-    UNIQUE INDEX `user_table_email_key`(`email`),
+    UNIQUE INDEX `user_email_key`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -47,14 +47,14 @@ CREATE TABLE `have_poke` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `list_table` (
+CREATE TABLE `posts` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `user_id` INTEGER NOT NULL,
     `content` VARCHAR(191) NOT NULL,
     `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `like_count` INTEGER NOT NULL DEFAULT 0,
 
-    UNIQUE INDEX `list_table_id_key`(`id`),
+    UNIQUE INDEX `posts_id_key`(`id`),
     INDEX `list_table_user_id_fkey`(`user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -69,4 +69,4 @@ CREATE TABLE `favorite_table` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `list_table` ADD CONSTRAINT `list_table_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user_table`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `posts` ADD CONSTRAINT `posts_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

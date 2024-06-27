@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
+import { signOut } from "next-auth/react";
 interface User {
   id: string;
   pro_img: string;
@@ -13,19 +13,20 @@ interface User {
 export const fetchUser = createAsyncThunk(
   "user/fetchUserData",
   async ({ userId, accessToken }: { userId: string; accessToken: string }) => {
-    const response = await fetch(
-      `http://localhost:3000/api/getuserdata?userId=${userId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${accessToken}`,
-        },
-      }
-    );
+    const response = await fetch(`/api/getuserdata?userId=${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${accessToken}`,
+      },
+    });
     const data = await response.json();
-    if (!response.ok) {
+    if (response.status === 404) {
+      //accessToken값 없이 user data get요청 시 에러
       throw new Error("데이터 가져오기 실패");
+    } else if (response.status === 401) {
+      //토큰 시간 만료 시 로그아웃
+      signOut();
     }
     return data;
   }
