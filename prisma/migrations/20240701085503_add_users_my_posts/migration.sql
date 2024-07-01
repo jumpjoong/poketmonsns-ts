@@ -41,8 +41,10 @@ CREATE TABLE `follow_table` (
 CREATE TABLE `have_poke` (
     `id` INTEGER NOT NULL,
     `poke_id` VARCHAR(191) NOT NULL,
+    `user_id` INTEGER NOT NULL,
 
     UNIQUE INDEX `have_poke_id_key`(`id`),
+    INDEX `have_poke_user_id_fkey`(`user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -67,6 +69,9 @@ CREATE TABLE `favorite_table` (
     UNIQUE INDEX `favorite_table_id_key`(`id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `have_poke` ADD CONSTRAINT `have_poke_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `posts` ADD CONSTRAINT `posts_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

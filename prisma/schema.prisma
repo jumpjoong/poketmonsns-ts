@@ -8,15 +8,16 @@ datasource db {
 }
 
 model user {
-  id         Int          @id @default(autoincrement())
-  pro_img    String       @default("000")
-  name       String       @default("")
-  email      String       @unique
-  password   String
-  credit     Int          @default(0)
-  rep        Int          @default(0)
-  badge_list Json?       
-  my_posts      posts[]
+  id          Int         @id @default(autoincrement())
+  pro_img     String      @default("000")
+  name        String      @default("")
+  email       String      @unique
+  password    String
+  credit      Int         @default(0)
+  rep         Int         @default(0)
+  badge_list  Json?   
+  my_poketmon have_poke[]
+  my_posts    posts[]
 }
 
 model poke_table {
@@ -39,15 +40,19 @@ model follow_table {
 model have_poke {
   id      Int    @id @unique
   poke_id String
+  user_id Int
+  author  user   @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], map: "have_poke_user_id_fkey")
 }
 
 model posts {
-  id         Int        @id @unique @default(autoincrement())
+  id         Int      @id @unique @default(autoincrement())
   user_id    Int
   content    String
-  date       DateTime   @default(now())
-  like_count Int        @default(0)
-  author     user @relation(fields: [user_id], references: [id])
+  date       DateTime @default(now())
+  like_count Int      @default(0)
+  author     user     @relation(fields: [user_id], references: [id])
 
   @@index([user_id], map: "list_table_user_id_fkey")
 }
