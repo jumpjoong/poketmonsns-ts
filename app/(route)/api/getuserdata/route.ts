@@ -39,6 +39,7 @@ export async function GET(req: Request) {
         rep: true,
         badge_list: true,
         my_posts: true,
+        my_poketmon: true,
       },
     });
     return new Response(JSON.stringify(userData));

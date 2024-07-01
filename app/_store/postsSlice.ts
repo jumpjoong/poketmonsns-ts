@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PostsState } from "../_types/postsType";
 
 export const fetchPosts = createAsyncThunk("posts/ferchPosts", async () => {
   const response = await fetch("/api/getposts", {
@@ -10,21 +11,6 @@ export const fetchPosts = createAsyncThunk("posts/ferchPosts", async () => {
   const data = await response.json();
   return data;
 });
-
-interface Posts {
-  id: number;
-  user_id: number;
-  content: string;
-  date: string;
-  like_count: number;
-  author: [];
-}
-
-interface PostsState {
-  posts: Posts | null;
-  status: "idle" | "loading" | "succeeded" | "failed";
-  error: string | null | undefined;
-}
 
 const initialState: PostsState = {
   posts: null,

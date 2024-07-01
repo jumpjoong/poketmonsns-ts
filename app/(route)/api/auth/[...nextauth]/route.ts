@@ -1,7 +1,6 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { NextAuthOptions } from "next-auth";
-
+import { NextAuthOptions, User } from "next-auth";
 const handler = NextAuth({
   providers: [
     // credentials는 인증 방식 선택 email과 비밀번호로 사용

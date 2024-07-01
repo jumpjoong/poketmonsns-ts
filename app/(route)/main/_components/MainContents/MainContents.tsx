@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useAppSelector } from "@/app/_hooks/hooks";
-import Posts from "./Posts/Posts";
+import Posts from "./Board/Board";
 import Trend from "./Trend/Trend";
 import Encyclopedia from "./Encyclopedia/Encyclopedia";
 import MyPosts from "./MyPosts/MyPosts";
