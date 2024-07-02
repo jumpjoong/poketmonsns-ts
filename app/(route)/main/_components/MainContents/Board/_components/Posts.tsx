@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import style from "@/_styles/posts.module.scss";
-import { useAppSelector } from "../_hooks/hooks";
+import { useAppSelector } from "@/_hooks/hooks";
 import { useSession } from "next-auth/react";
 import moment from "moment-timezone";
-import { PostsProps } from "../_types/postsType";
+import { PostsProps } from "@/_types/postsType";
 
 const Posts = ({ posts }: PostsProps) => {
   const { data: session, status } = useSession();

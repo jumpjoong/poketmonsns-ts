@@ -13,6 +13,7 @@ const moreDetailControl = createSlice({
   initialState: false,
   reducers: {
     moreDetail: state => !state,
+    resetMoreDetail: () => false,
   },
 });
 
@@ -31,7 +32,6 @@ const selectPoketmon = createSlice({
   },
   reducers: {
     selectPoket: (state, action) => {
-      // action.payload를 사용하여 상태를 업데이트
       return { ...state, ...action.payload };
     },
   },
@@ -43,4 +43,4 @@ export const moreDetailReducer = moreDetailControl.reducer;
 
 export const { poketBuyModalHandler } = poketModalControl.actions;
 export const { selectPoket } = selectPoketmon.actions;
-export const { moreDetail } = moreDetailControl.actions;
+export const { moreDetail, resetMoreDetail } = moreDetailControl.actions;
