@@ -1,17 +1,23 @@
-import React from "react";
-import { poketmonType } from "../_types/encyclopedia";
+import React, { Ref, useEffect } from "react";
+import { poketmonType } from "@/_types/encyclopedia";
 import style from "@/_styles/encyclopedia.module.scss";
-import { useAppDispatch, useAppSelector } from "../_hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/_hooks/hooks";
 import {
   moreDetail,
   poketBuyModalHandler,
+  resetMoreDetail,
   selectPoket,
-} from "../_store/encyclopediaSlice";
+} from "@/_store/encyclopediaSlice";
 
-function Poketmon({ poketmon }: { poketmon: poketmonType }) {
+function Poketmon({
+  poketmon,
+  innerRef,
+}: {
+  poketmon: poketmonType;
+  innerRef: Ref<HTMLParagraphElement>;
+}) {
   const user = useAppSelector(state => state.user.user);
   const dispatch = useAppDispatch();
-
   const poketBuyHandler = (poketmon: poketmonType) => {
     dispatch(selectPoket(poketmon));
     if (user?.my_poketmon.some(obj => obj.poke_id === poketmon.id)) {
@@ -27,6 +33,9 @@ function Poketmon({ poketmon }: { poketmon: poketmonType }) {
     dispatch(selectPoket(poketmon));
     console.log("상세보기버튼, Chart.js 써야함", poketmon.id);
   };
+  useEffect(() => {
+    dispatch(resetMoreDetail());
+  }, []);
   return (
     <figure
       className={
@@ -35,6 +44,7 @@ function Poketmon({ poketmon }: { poketmon: poketmonType }) {
           : `${style.poke_card} ${style.have}`
       }
       key={poketmon.id}
+      ref={innerRef}
     >
       <div className={style.card_img_wrap}>
         <img src={poketmon.card_url} alt={poketmon.en_name}></img>

@@ -1,12 +1,15 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import style from "@/_styles/encyclopedia.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import { poketmonType } from "@/app/_types/encyclopedia";
-import Poketmon from "@/app/_components/Poketmon";
+import Poketmon from "./_components/Poketmon";
 import { poketBuyModalHandler } from "@/app/_store/encyclopediaSlice";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
 
 function Encyclopedia() {
-  const [poketmon, setpoketmon] = useState<poketmonType[]>();
+  const [refView, inView] = useInView();
   const user = useAppSelector(state => state.user.user);
   //Poketmon.tsx에서 선택한 포켓몬 각종 정보
   const selectPoketmon = useAppSelector(state => state.selectPoket);
@@ -30,31 +33,45 @@ function Encyclopedia() {
     console.log("대표 포켓몬 변경 버튼");
   };
 
-  useEffect(() => {
-    const getEncyclopedia = async () => {
-      try {
-        const poketmon = await fetch(`/api/getencyclopedia`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const res = await poketmon.json();
-        setpoketmon(res);
-      } catch (err) {
-        console.log(err);
+  const fetchPoketmon = async (pageParam: number) => {
+    const poketmon = await fetch(
+      `/api/getencyclopedia?page=${pageParam}&limit=30`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    };
-    getEncyclopedia();
-  }, [user]);
+    );
+    return poketmon.json();
+  };
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    useInfiniteQuery({
+      queryKey: ["todos"],
+      queryFn: ({ pageParam = 1 }) => fetchPoketmon(pageParam),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage, allPage) => {
+        return lastPage.length ? allPage.length + 1 : null;
+      },
+    });
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
 
   return (
     <>
       <article className={style.encyclopedia_container}>
-        {poketmon &&
-          poketmon.map(poketmon => {
-            return <Poketmon poketmon={poketmon} key={poketmon.id} />;
-          })}
+        {data?.pages &&
+          data?.pages.map(poketmon =>
+            poketmon.map((res: poketmonType) => {
+              return (
+                <Poketmon poketmon={res} key={res.id} innerRef={refView} />
+              );
+            })
+          )}
         <div
           className={
             poketBuyModal
@@ -119,6 +136,7 @@ function Encyclopedia() {
             </div>
           </div>
         </div>
+        {isFetchingNextPage && <h3>데이터 불러오는중</h3>}
       </article>
     </>
   );

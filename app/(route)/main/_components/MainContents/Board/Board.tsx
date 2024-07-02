@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import { fetchPosts } from "@/app/_store/postsSlice";
 import React, { useEffect, useState } from "react";
 import style from "@/_styles/board.module.scss";
-import Posts from "@/app/_components/Posts";
+import Posts from "./_components/Posts";
 function Board() {
   const posts = useAppSelector(state => state.posts.posts);
   const [followControl, setFollowControl] = useState(true);
