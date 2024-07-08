@@ -1,10 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { poketmonType } from "../_types/encyclopedia";
 
 const poketModalControl = createSlice({
   name: "poketmonModalControl",
   initialState: false,
   reducers: {
     poketBuyModalHandler: state => !state,
+    resetPoketBuyModalHandler: () => false,
   },
 });
 
@@ -31,7 +33,7 @@ const selectPoketmon = createSlice({
     credit: 0,
   },
   reducers: {
-    selectPoket: (state, action) => {
+    selectPoket: (state, action: PayloadAction<poketmonType>) => {
       return { ...state, ...action.payload };
     },
   },
@@ -41,6 +43,7 @@ export const poketModalControlReducer = poketModalControl.reducer;
 export const selectPoketmonReducer = selectPoketmon.reducer;
 export const moreDetailReducer = moreDetailControl.reducer;
 
-export const { poketBuyModalHandler } = poketModalControl.actions;
+export const { poketBuyModalHandler, resetPoketBuyModalHandler } =
+  poketModalControl.actions;
 export const { selectPoket } = selectPoketmon.actions;
 export const { moreDetail, resetMoreDetail } = moreDetailControl.actions;

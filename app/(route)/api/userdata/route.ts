@@ -1,6 +1,6 @@
 import { verifyJwt } from "@/app/_lib/jwt/jwt";
 import prisma from "prisma/prisma";
-
+//로그인 시 유저 데이터 가져오는 로직
 export async function GET(req: Request) {
   const searchParams = new URL(req.url).searchParams;
   const userId = Number(searchParams.get("userId"));
@@ -46,4 +46,17 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error("Error handling request:", error);
   }
+}
+//포켓몬 구매 시 크레딧 업그레이드
+export async function POST(req: Request) {
+  const body = await req.json();
+  await prisma.user.update({
+    where: {
+      id: body.user_id,
+    },
+    data: {
+      credit: body.credit,
+    },
+  });
+  return Response.json("credit update");
 }

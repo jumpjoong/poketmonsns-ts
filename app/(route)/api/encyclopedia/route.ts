@@ -17,7 +17,15 @@ export async function GET(req: Request) {
     skip: offset,
     take: validLimit,
   });
-  return new Response(JSON.stringify(allPoketmon));
-  // const allPoketmon = await prisma.poke_table.findMany();
-  // return new Response(JSON.stringify(allPoketmon));
+  return Response.json(allPoketmon);
+}
+export async function POST(req: Request) {
+  const body = await req.json();
+  await prisma.have_poke.create({
+    data: {
+      user_id: body.user_id,
+      poke_id: body.poke_id,
+    },
+  });
+  return Response.json("credit update");
 }
