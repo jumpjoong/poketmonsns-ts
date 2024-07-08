@@ -28,8 +28,9 @@ model poke_table {
   ko_type    String? @db.VarChar(100)
   card_url   String? @db.VarChar(200)
   motion_url String? @db.VarChar(200)
-  stats      String? @db.VarChar(100)
+  stats      Json?
   credit     Int     @default(0)
+  have_poke have_poke[]
 }
 
 model follow_table {
@@ -38,12 +39,14 @@ model follow_table {
 }
 
 model have_poke {
-  id      Int    @id @unique
-  poke_id String
+  id      Int   @id @default(autoincrement())
+  poke_id Int
   user_id Int
   author  user   @relation(fields: [user_id], references: [id])
+  poke poke_table @relation(fields: [poke_id], references: [id])
 
   @@index([user_id], map: "have_poke_user_id_fkey")
+  
 }
 
 model posts {

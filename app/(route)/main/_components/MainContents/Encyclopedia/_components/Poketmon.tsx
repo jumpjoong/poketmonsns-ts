@@ -1,11 +1,10 @@
 import React, { Ref, useEffect } from "react";
 import { poketmonType } from "@/_types/encyclopedia";
-import style from "@/_styles/encyclopedia.module.scss";
+import style from "@/_styles/poketmon.module.scss";
 import { useAppDispatch, useAppSelector } from "@/_hooks/hooks";
 import {
   moreDetail,
   poketBuyModalHandler,
-  resetMoreDetail,
   selectPoket,
 } from "@/_store/encyclopediaSlice";
 
@@ -20,22 +19,14 @@ function Poketmon({
   const dispatch = useAppDispatch();
   const poketBuyHandler = (poketmon: poketmonType) => {
     dispatch(selectPoket(poketmon));
-    if (user?.my_poketmon.some(obj => obj.poke_id === poketmon.id)) {
-      alert("이미 보유중인 포켓몬 입니다");
-    } else {
-      //팝업창 생성
-      dispatch(poketBuyModalHandler());
-    }
+    //팝업창 생성
+    dispatch(poketBuyModalHandler());
   };
   //상세보기 버튼
   const pokeDetail = () => {
     dispatch(moreDetail());
     dispatch(selectPoket(poketmon));
-    console.log("상세보기버튼, Chart.js 써야함", poketmon.id);
   };
-  useEffect(() => {
-    dispatch(resetMoreDetail());
-  }, []);
   return (
     <figure
       className={

@@ -1,12 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import style from "@/_styles/encyclopedia.module.scss";
+import React, { useEffect, useRef } from "react";
+import {
+  poketBuyModalHandler,
+  moreDetail,
+  resetMoreDetail,
+  resetPoketBuyModalHandler,
+} from "@/app/_store/encyclopediaSlice";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import { poketmonType } from "@/app/_types/encyclopedia";
-import Poketmon from "./_components/Poketmon";
-import { poketBuyModalHandler } from "@/app/_store/encyclopediaSlice";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
+import PoketmonStatus from "./_components/PoketmonStatus";
+import Poketmon from "./_components/Poketmon";
+import style from "@/_styles/encyclopedia.module.scss";
 
 function Encyclopedia() {
   const [refView, inView] = useInView();
@@ -16,26 +22,72 @@ function Encyclopedia() {
   //poketmon.tsx에서 구매하기 버튼 누르면 나오는 modal창
   const poketBuyModal = useAppSelector(state => state.ModalControl);
   //상세정보 누르면 나오는 모달창 컨트롤
-  const moreDetail = useAppSelector(state => state.moreDetail);
+  const moreDetailControl = useAppSelector(state => state.moreDetail);
   const dispatch = useAppDispatch();
+  //구매하기 모달창 부모 ref
+  const parentRef = useRef<HTMLDivElement>(null);
+  //스탯 모달창 ref
+  const statsRef = useRef<HTMLDivElement>(null);
+
+  //구매하기, 상세보기 눌렀을 때 뜨는 모달창 컨트롤
   const modalClick = (e: React.MouseEvent<HTMLElement>) => {
-    // if (e.target.id === "aa") {
-    // dispatch(poketBuyModalHandler());
-    // }
+    //실제 내가 클릭하는 event
+    const clickEvent = e.target as HTMLElement;
+    //구매하기 눌렀을 때 모달창 로직
+    if (clickEvent.className === parentRef.current?.className) {
+      //모달창 외부 클릭할 경우 모달창 닫는 로직
+      dispatch(poketBuyModalHandler());
+    } else if (clickEvent.className === statsRef.current?.className) {
+      //상세보기의 모달창 외부를 눌렀을 경우의 모달창 닫는 로직
+      dispatch(moreDetail());
+    }
   };
-  const yes = () => {
-    console.log("구매하기 yes버튼");
+  const yes = async () => {
+    //크레딧이 부족하여 못사는 로직
+    if (user && user?.credit < selectPoketmon.credit) {
+      window.alert("구매하실 수 없습니다!");
+      dispatch(poketBuyModalHandler());
+    } else {
+      const updateCredit = user && user?.credit - selectPoketmon.credit;
+      //have_poke에 행 추가
+      await fetch(`/api/encyclopedia`, {
+        method: "POST",
+        body: JSON.stringify({
+          user_id: user?.id,
+          poke_id: selectPoketmon.id,
+        }),
+      });
+      await fetch(`/api/userdata`, {
+        method: "POST",
+        body: JSON.stringify({
+          user_id: user && user.id,
+          credit: updateCredit,
+        }),
+      });
+      location.reload();
+    }
   };
   const no = () => {
     dispatch(poketBuyModalHandler());
   };
-  const changeRep = () => {
-    console.log("대표 포켓몬 변경 버튼");
+  const changeRep = async () => {
+    if (user?.my_poketmon.some(obj => obj.poke_id === selectPoketmon.id)) {
+      await fetch(`/api/changerep`, {
+        method: "POST",
+        body: JSON.stringify({
+          user_id: user.id,
+          rep: selectPoketmon.id,
+        }),
+      });
+      location.reload();
+    } else {
+      alert("구매 먼저 진행해주세요!");
+    }
   };
 
   const fetchPoketmon = async (pageParam: number) => {
     const poketmon = await fetch(
-      `/api/getencyclopedia?page=${pageParam}&limit=30`,
+      `/api/encyclopedia?page=${pageParam}&limit=30`,
       {
         method: "GET",
         headers: {
@@ -54,21 +106,23 @@ function Encyclopedia() {
         return lastPage.length ? allPage.length + 1 : null;
       },
     });
-
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage();
     }
+    return () => {
+      dispatch(resetMoreDetail());
+      dispatch(resetPoketBuyModalHandler());
+    };
   }, [inView, fetchNextPage, hasNextPage]);
-
   return (
     <>
       <article className={style.encyclopedia_container}>
         {data?.pages &&
           data?.pages.map(poketmon =>
-            poketmon.map((res: poketmonType) => {
+            poketmon.map((obj: poketmonType) => {
               return (
-                <Poketmon poketmon={res} key={res.id} innerRef={refView} />
+                <Poketmon poketmon={obj} key={obj.id} innerRef={refView} />
               );
             })
           )}
@@ -80,9 +134,9 @@ function Encyclopedia() {
           }
         >
           <div
-            id="aa"
             className={style.encyclopedia_modal}
             onClick={e => modalClick(e)}
+            ref={parentRef}
           >
             <div className={style.modal_wrap}>
               <div className={style.modal_wrap_first}>
@@ -118,25 +172,25 @@ function Encyclopedia() {
         </div>
         <div
           className={
-            moreDetail
+            moreDetailControl
               ? `${style.sticky_tray}  ${style.on}`
               : `${style.sticky_tray}`
           }
         >
           <div
-            id="aa"
-            className={style.encyclopedia_modal}
+            className={`${style.encyclopedia_modal} ${style.stats}`}
             onClick={e => modalClick(e)}
+            ref={statsRef}
           >
             <div className={style.pickup}>
-              {/* <div><Chart num={selectPoketmon.id}></Chart></div> */}
+              <PoketmonStatus />
               <button onClick={() => changeRep()}>
                 <p>대표캐릭터 설정</p>
               </button>
             </div>
           </div>
         </div>
-        {isFetchingNextPage && <h3>데이터 불러오는중</h3>}
+        {isFetchingNextPage && <h3>로딩 이미지 또는 스피너 css구현할 것</h3>}
       </article>
     </>
   );

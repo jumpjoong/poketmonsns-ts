@@ -5,7 +5,7 @@ export interface UserState {
 }
 
 interface User {
-  id: string;
+  id: number;
   pro_img: string;
   name: string;
   email: string;
@@ -21,7 +21,7 @@ interface MyPoketmon {
   user_id: number;
   author: Author;
 }
-interface Author {
+export interface Author {
   user_id: number;
   id: number;
 }
