@@ -9,10 +9,33 @@ const Posts = ({ posts }: PostsProps) => {
   const { data: session, status } = useSession();
   const user = useAppSelector(state => state.user.user);
   const [infoMode, setInfoMode] = useState(false);
+  const [likeCount, setLikeCount] = useState(posts.like_count);
+  const [isLike, setIsLike] = useState(
+    posts.like_post.some(obj => obj.user_id === user?.id)
+  );
   const date = moment(posts.date).utc().tz("Asia/Seoul").fromNow();
-  const handleLike = () => {
+  const handleLike = async () => {
     // 좋아요 컨트롤
-    console.log("좋아요 컨트롤");
+    const response = await fetch(`/api/likecount`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user_id: user?.id, post_id: posts.id }),
+    });
+    const data = await response.json();
+    if (data.ok) {
+      setIsLike(!isLike);
+      if (data.message === "좋아요삭제") {
+        setLikeCount(likeCount - 1);
+      } else {
+        setLikeCount(likeCount + 1);
+      }
+    } else {
+      //좋아요 에러 날 경우 초기 상태로 변환
+      setIsLike(isLike);
+      console.log(data.error);
+    }
   };
   const dataDelete = () => {
     //데이터 삭제
@@ -44,14 +67,14 @@ const Posts = ({ posts }: PostsProps) => {
           </div>
           <section className={style.btn_m}>
             <p>{posts.like_count}</p>
-            <button
-              // className={
-              // favoritelist.includes(session.user.id.toString())
-              // ? style.fillheart
-              // : style.heart
-              // }
+            {/* <button
+              className={
+                posts.like_post.some(obj => obj.user_id === user.id)
+                  ? style.fillheart
+                  : style.heart
+              }
               onClick={handleLike}
-            ></button>
+            ></button> */}
           </section>
           <div
             className={style.info_mod_wrap}
@@ -110,13 +133,9 @@ const Posts = ({ posts }: PostsProps) => {
         </div>
         <pre className={style.detail}>{posts.content}</pre>
         <section className={style.btn}>
-          <p>{posts.like_count}</p>
+          <p>{likeCount}</p>
           <button
-            // className={
-            //   favoritelist.includes(session.user.id.toString())
-            //     ? style.fillheart
-            //     : style.heart
-            // }
+            className={isLike ? style.fillheart : style.heart}
             onClick={handleLike}
           ></button>
         </section>

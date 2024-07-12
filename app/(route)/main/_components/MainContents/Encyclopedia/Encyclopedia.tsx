@@ -67,9 +67,11 @@ function Encyclopedia() {
       location.reload();
     }
   };
+  //아니오 버튼
   const no = () => {
     dispatch(poketBuyModalHandler());
   };
+  //대표 포켓몬 변경
   const changeRep = async () => {
     if (user?.my_poketmon.some(obj => obj.poke_id === selectPoketmon.id)) {
       await fetch(`/api/changerep`, {
@@ -82,6 +84,7 @@ function Encyclopedia() {
       location.reload();
     } else {
       alert("구매 먼저 진행해주세요!");
+      dispatch(resetMoreDetail());
     }
   };
 

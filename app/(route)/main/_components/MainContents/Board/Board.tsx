@@ -4,13 +4,14 @@ import React, { useEffect, useState } from "react";
 import style from "@/_styles/board.module.scss";
 import Posts from "./_components/Posts";
 function Board() {
-  const posts = useAppSelector(state => state.posts.posts);
+  const posts = useAppSelector(state => state.posts);
   const [followControl, setFollowControl] = useState(true);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchPosts());
-  }, []);
-  if (posts === null)
+  }, [dispatch]);
+
+  if (posts.posts === null || posts.status === "loading")
     return (
       <div className={style.load}>
         <img src="/img/loadimg/pika_heart.webp" alt="로딩 이미지" />
@@ -40,7 +41,7 @@ function Board() {
             <>팔로우한 사람이 없습니다.</>
           ) : (
             posts &&
-            posts.map((posts, key) => <Posts posts={posts} key={key} />)
+            posts.posts.map((posts, key) => <Posts posts={posts} key={key} />)
           )}
         </ul>
       </div>

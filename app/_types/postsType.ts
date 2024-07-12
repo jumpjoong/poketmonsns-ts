@@ -15,9 +15,22 @@ interface Posts {
   content: string;
   date: string;
   like_count: number;
-  author: Author;
+  author: Author[];
+  like_post: LikePostType[];
 }
 interface Author {
+  user_id: number;
   id: number;
-  name: string;
+}
+
+interface PostAuthor {
+  post_id: number;
+  id: number;
+}
+interface LikePostType {
+  id: number;
+  user_id: number;
+  post_id: number;
+  user: Author;
+  post: PostAuthor;
 }

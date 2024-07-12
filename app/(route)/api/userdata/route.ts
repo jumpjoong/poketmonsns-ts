@@ -37,6 +37,7 @@ export async function GET(req: Request) {
         email: true,
         credit: true,
         rep: true,
+        rep_motion_url: true,
         badge_list: true,
         my_posts: true,
         my_poketmon: true,

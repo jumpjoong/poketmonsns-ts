@@ -15,9 +15,12 @@ model user {
   password    String
   credit      Int         @default(0)
   rep         Int         @default(0)
+  rep_motion_url String @default("")
   badge_list  Json?   
   my_poketmon have_poke[]
   my_posts    posts[]
+  like_post like_post[]
+
 }
 
 model poke_table {
@@ -57,9 +60,19 @@ model posts {
   like_count Int      @default(0)
   author     user     @relation(fields: [user_id], references: [id])
 
+  like_post like_post[]
   @@index([user_id], map: "list_table_user_id_fkey")
 }
 
+model like_post {
+  id      Int    @id @default(autoincrement())
+  user_id Int
+  post_id Int
+  user    user   @relation(fields: [user_id], references: [id])
+  post    posts  @relation(fields: [post_id], references: [id])
+
+    @@unique([user_id, post_id])
+}
 model favorite_table {
   id            Int    @id @unique
   favorite_list String @db.VarChar(2000)
