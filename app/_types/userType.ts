@@ -11,6 +11,7 @@ interface User {
   email: string;
   credit: number;
   rep: number;
+  rep_motion_url: string;
   badge_list: [];
   my_poketmon: MyPoketmon[];
   my_posts: MyPosts[];

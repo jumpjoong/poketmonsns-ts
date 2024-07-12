@@ -18,7 +18,6 @@ export const fetchUser = createAsyncThunk(
       //accessToken값 없이 user data get요청 시 에러
       throw new Error("데이터 가져오기 실패");
     } else if (response.status === 401 || data === null) {
-      console.log(data);
       //토큰 시간 만료 시 로그아웃
       signOut();
     }

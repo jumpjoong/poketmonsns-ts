@@ -21,6 +21,7 @@ function Profile() {
   };
   const profileBtnClick = () => {
     // if (pageStatus !== "NEWBIE") setPageStatus("PROFILE");
+    console.log(user);
   };
   const followBtnClick = () => {
     // if (pageStatus !== "NEWBIE") setPageStatus("FOLLOW");
@@ -138,12 +139,10 @@ function Profile() {
           </div>
           <div className={style.rep_wrap}>
             <div className={style.rep_ring}></div>
-            {user.rep == 0 ? (
+            {user.rep_motion_url == "" ? (
               <img src="/img/poke_silueta.png" alt=""></img>
             ) : (
-              <img src="/img/poke_silueta.png" alt=""></img>
-              // mysql poke_table에 motion_url있음
-              // <img src={pokedata && pokedata.motion_url} alt=""></img>
+              <img src={user.rep_motion_url} alt=""></img>
             )}
           </div>
         </aside>
