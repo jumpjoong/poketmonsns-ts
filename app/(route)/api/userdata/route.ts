@@ -39,13 +39,30 @@ export async function GET(req: Request) {
         rep: true,
         rep_motion_url: true,
         badge_list: true,
-        my_posts: true,
+        my_posts: {
+          orderBy: {
+            date: "desc",
+          },
+          include: {
+            like_post: true,
+          },
+        },
         my_poketmon: true,
+        followers: {
+          include: {
+            follower: true,
+          },
+        },
+        following: {
+          include: {
+            following: true,
+          },
+        },
       },
     });
     return new Response(JSON.stringify(userData));
   } catch (error) {
-    console.error("Error handling request:", error);
+    return console.error("Error handling request:", error);
   }
 }
 //포켓몬 구매 시 크레딧 업그레이드

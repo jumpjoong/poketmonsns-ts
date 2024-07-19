@@ -9,13 +9,13 @@ export interface PostsProps {
   posts: Posts;
 }
 
-interface Posts {
+export interface Posts {
   id: number;
   user_id: number;
   content: string;
   date: string;
   like_count: number;
-  author: Author[];
+  author: Author;
   like_post: LikePostType[];
 }
 interface Author {
@@ -27,7 +27,8 @@ interface PostAuthor {
   post_id: number;
   id: number;
 }
-interface LikePostType {
+//userType.ts
+export interface LikePostType {
   id: number;
   user_id: number;
   post_id: number;

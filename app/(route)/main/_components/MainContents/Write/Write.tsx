@@ -1,27 +1,45 @@
-import React, { FormEvent } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import style from "@/_styles/write.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import { selectsPost } from "@/app/_store/mainContentsSlice";
 import { fetchUser } from "@/app/_store/userSlice";
 import { useSession } from "next-auth/react";
-function Write() {
+type WriteType = {
+  PostId?: number;
+  content?: string;
+  editMode?: boolean;
+};
+function Write({ PostId, content, editMode }: WriteType) {
   const { data: session, status } = useSession();
   const user = useAppSelector(state => state.user.user);
+  const [text, setText] = useState(content || "");
   const dispatch = useAppDispatch();
 
   //작성글 db저장 및 크레딧 올리고 user정보 다시 가져옴
-  const create = async (e: FormEvent<HTMLFormElement>) => {
+  const create = async (e: FormEvent) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const formData = form.elements.namedItem("content") as HTMLTextAreaElement;
-    await fetch(`/api/write`, {
-      method: "POST",
-      body: JSON.stringify({
-        content: formData.value,
-        user_id: user?.id,
-        credit: user?.credit,
-      }),
-    });
+    const postData = {
+      content: text,
+      user_id: user?.id,
+      credit: user?.credit,
+    };
+    if (editMode) {
+      //기존 글 수정 로직
+      await fetch(`/api/write`, {
+        method: "POST",
+        body: JSON.stringify({
+          PostId: PostId,
+          content: text,
+          edit: "edit",
+        }),
+      });
+    } else {
+      //새 글 작성 로직
+      await fetch(`/api/write`, {
+        method: "POST",
+        body: JSON.stringify(postData),
+      });
+    }
     if (user?.id && session?.user.accessToken) {
       dispatch(
         fetchUser({ userId: user.id, accessToken: session.user.accessToken })
@@ -29,6 +47,9 @@ function Write() {
     }
     dispatch(selectsPost());
   };
+  useEffect(() => {
+    setText(content || "");
+  }, [content]);
   return (
     <div>
       <form className={style.Contenteditor} onSubmit={create}>
@@ -41,7 +62,12 @@ function Write() {
           </div>
         </div>
         <div className={style.textBox}>
-          <textarea name="content" placeholder="무슨 일이 있었나요?" />
+          <textarea
+            name="content"
+            placeholder="무슨 일이 있었나요?"
+            value={text}
+            onChange={e => setText(e.target.value)}
+          />
           <section>
             <button
               className={style.Dbtn}

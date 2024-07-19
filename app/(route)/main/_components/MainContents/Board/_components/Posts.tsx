@@ -1,11 +1,25 @@
 import React, { useState } from "react";
 import style from "@/_styles/posts.module.scss";
-import { useAppSelector } from "@/_hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/_hooks/hooks";
 import { useSession } from "next-auth/react";
 import moment from "moment-timezone";
 import { PostsProps } from "@/_types/postsType";
-
-const Posts = ({ posts }: PostsProps) => {
+import { fetchPosts } from "@/app/_store/postsSlice";
+import { fetchUser } from "@/app/_store/userSlice";
+import Image from "next/image";
+interface AddIsFollow extends PostsProps {
+  isFollow: boolean;
+  userFollowHandler: (postsId: number, postsUserId: number) => void;
+  id?: string;
+  onEdit: (id: number, content: string, editMode: string) => void;
+}
+const Posts = ({
+  posts,
+  isFollow,
+  userFollowHandler,
+  id,
+  onEdit,
+}: AddIsFollow) => {
   const { data: session, status } = useSession();
   const user = useAppSelector(state => state.user.user);
   const [infoMode, setInfoMode] = useState(false);
@@ -14,6 +28,8 @@ const Posts = ({ posts }: PostsProps) => {
     posts.like_post.some(obj => obj.user_id === user?.id)
   );
   const date = moment(posts.date).utc().tz("Asia/Seoul").fromNow();
+  const dispatch = useAppDispatch();
+
   const handleLike = async () => {
     // 좋아요 컨트롤
     const response = await fetch(`/api/likecount`, {
@@ -37,25 +53,35 @@ const Posts = ({ posts }: PostsProps) => {
       console.log(data.error);
     }
   };
-  const dataDelete = () => {
+  const dataDelete = async () => {
     //데이터 삭제
-    console.log("데이터 수정삭제", posts);
+    await fetch(`/api/posts`, {
+      method: "POST",
+      body: JSON.stringify({
+        posts_id: posts.id,
+        posts_user_id: posts.user_id,
+        user_id: user?.id,
+        credit: user?.credit,
+      }),
+    });
+    dispatch(fetchPosts());
+    if (session?.user.accessToken) {
+      dispatch(
+        fetchUser({ userId: user!.id, accessToken: session.user.accessToken })
+      );
+    }
   };
-  const dataUpdate = () => {
-    //데이터 수정
-    console.log("데이터 수정삭제", posts);
-  };
-  const userFollowHandlerHandler = () => {
-    console.log("팔로우핸들러", posts.user_id);
-  };
+
   return (
     user &&
     session && (
-      <li className={style.detail_list} key={posts.id}>
+      <li id={id} className={style.detail_list} key={posts.id}>
         <div className={style.profileInfo}>
           <div className={style.profile_info_wrap}>
             <div className={style.profile_img}>
-              <img
+              <Image
+                width="60"
+                height="60"
                 src={`/img/poke_profile_img/pokballpixel-${user.pro_img}.png`}
                 alt=""
               />
@@ -66,15 +92,11 @@ const Posts = ({ posts }: PostsProps) => {
             </div>
           </div>
           <section className={style.btn_m}>
-            <p>{posts.like_count}</p>
-            {/* <button
-              className={
-                posts.like_post.some(obj => obj.user_id === user.id)
-                  ? style.fillheart
-                  : style.heart
-              }
+            <p>{likeCount}</p>
+            <button
+              className={isLike ? style.fillheart : style.heart}
               onClick={handleLike}
-            ></button> */}
+            ></button>
           </section>
           <div
             className={style.info_mod_wrap}
@@ -92,7 +114,7 @@ const Posts = ({ posts }: PostsProps) => {
                 fill="#E36E6E"
               />
             </svg>
-            {session.user.id !== posts.user_id ? (
+            {user.id !== posts.user_id ? (
               <div
                 className={
                   infoMode
@@ -102,15 +124,9 @@ const Posts = ({ posts }: PostsProps) => {
               >
                 <p
                   className={style.follow}
-                  // onClick={() =>
-                  //   userFollowHandlerHandler(
-                  //     myfollowlist.includes(posts.user_id.toString())
-                  //   )
-                  // }
+                  onClick={() => userFollowHandler(posts.user_id, posts.id)}
                 >
-                  {/* {myfollowlist.includes(posts.user_id.toString())
-                    ? "언팔로우"
-                    : "팔로우"} */}
+                  {isFollow ? "언팔로우" : "팔로우"}
                 </p>
               </div>
             ) : (
@@ -121,7 +137,10 @@ const Posts = ({ posts }: PostsProps) => {
                     : style.info_mod_btn_wrap
                 }
               >
-                <p className={style.update} onClick={() => dataUpdate()}>
+                <p
+                  className={style.update}
+                  onClick={() => onEdit(posts.id, posts.content, "editMode")}
+                >
                   수정
                 </p>
                 <p className={style.remove} onClick={() => dataDelete()}>

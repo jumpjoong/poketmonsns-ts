@@ -1,10 +1,12 @@
+import { LikePostType } from "./postsType";
+
 export interface UserState {
   user: User | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null | undefined;
 }
 
-interface User {
+export interface User {
   id: number;
   pro_img: string;
   name: string;
@@ -15,6 +17,8 @@ interface User {
   badge_list: [];
   my_poketmon: MyPoketmon[];
   my_posts: MyPosts[];
+  follower: FollowerType[];
+  following: FollowingType[];
 }
 interface MyPoketmon {
   id: number;
@@ -22,6 +26,7 @@ interface MyPoketmon {
   user_id: number;
   author: Author;
 }
+//board.tsx
 export interface Author {
   user_id: number;
   id: number;
@@ -34,4 +39,19 @@ interface MyPosts {
   date: string;
   like_count: number;
   author: Author;
+  like_post: LikePostType[];
+}
+//board.tsx
+export interface FollowerType {
+  id: number;
+  follower_id: number;
+  following_id: number;
+  follower: Author;
+}
+
+export interface FollowingType {
+  id: number;
+  follower_id: number;
+  following_id: number;
+  following: Author;
 }
