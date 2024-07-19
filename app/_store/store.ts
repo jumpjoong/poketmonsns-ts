@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import mainContentsReducer from "./mainContentsSlice";
-import postsReducer from "./postsSlice";
+import postsReducer, { followingReducer } from "./postsSlice";
 import {
   moreDetailReducer,
   poketModalControlReducer,
@@ -15,6 +15,7 @@ const store = configureStore({
     ModalControl: poketModalControlReducer,
     selectPoket: selectPoketmonReducer,
     moreDetail: moreDetailReducer,
+    following: followingReducer,
   },
 });
 

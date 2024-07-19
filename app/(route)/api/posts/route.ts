@@ -1,15 +1,35 @@
 import prisma from "prisma/prisma";
 
 export async function GET(req: Request) {
-  const allPosts = await prisma.posts.findMany({
-    orderBy: {
-      date: "desc",
-    },
-    include: {
-      like_post: true,
-    },
-  });
-  return new Response(JSON.stringify(allPosts));
+  const searchParams = new URL(req.url).searchParams;
+  const userId = Number(searchParams.get("userId"));
+
+  const [allPosts, user] = await Promise.all([
+    prisma.posts.findMany({
+      orderBy: {
+        date: "desc",
+      },
+      include: {
+        like_post: true,
+      },
+    }),
+    prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        following: {
+          include: {
+            following: true,
+          },
+        },
+      },
+    }),
+  ]);
+  return new Response(
+    JSON.stringify({
+      posts: allPosts,
+      userFollowing: user?.following || [],
+    })
+  );
 }
 
 export async function POST(req: Request) {

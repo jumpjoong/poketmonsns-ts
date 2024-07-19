@@ -1,6 +1,14 @@
+import { FollowingType } from "./userType";
+
 //postsSlice.tsx
 export interface PostsState {
   posts: Posts[] | null;
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null | undefined;
+}
+//postsSlice.tsx // followinitial
+export interface FollowState {
+  userFollowing: FollowingType[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null | undefined;
 }
