@@ -133,12 +133,12 @@ function Board({ onEdit }: BoardProps) {
                 onEdit={onEdit}
               />
             ))
-          ) : user?.following === null || user?.following === undefined ? (
+          ) : following.length === 0 ? (
             <li>팔로잉을 한 사람이 없습니다! 팔로잉을 해주세요!</li>
           ) : (
             posts.posts
               .filter(posts =>
-                user?.following.some(obj => posts.user_id === obj.following_id)
+                following.some(obj => posts.user_id === obj.following_id)
               )
               .map(posts => (
                 <Posts
