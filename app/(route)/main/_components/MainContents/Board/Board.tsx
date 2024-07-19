@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
-import { fetchPosts } from "@/app/_store/postsSlice";
+import { fetchPosts, follow, unfollow } from "@/app/_store/postsSlice";
 import React, { useEffect, useState } from "react";
 import style from "@/_styles/board.module.scss";
 import Posts from "./_components/Posts";
@@ -17,11 +17,10 @@ type BoardProps = {
 function Board({ onEdit }: BoardProps) {
   const user = useAppSelector(state => state.user.user);
   const posts = useAppSelector(state => state.posts);
+  const followingUser = useAppSelector(state => state.following);
   const userStatus = useAppSelector(state => state.user.status);
   const [followControl, setFollowControl] = useState(true);
-  const [following, setFollowing] = useState<FollowingType[]>(
-    user?.following || []
-  );
+  const [following, setFollowing] = useState<FollowingType[]>([]);
 
   const userFollowHandler = async (postsUserId: number, postsId: number) => {
     //following_id = 내가 팔로우 할 아이디
@@ -44,6 +43,13 @@ function Board({ onEdit }: BoardProps) {
         follow => follow.following_id !== postsUserId
       );
       setFollowing(updatedLocalFollowing);
+      dispatch(
+        unfollow({
+          userId: user?.id,
+          followingId: postsUserId,
+          updatedLocalFollowing,
+        })
+      );
     } else {
       //팔로우 로직
       const updatedLocalFollowing = [
@@ -56,13 +62,20 @@ function Board({ onEdit }: BoardProps) {
         },
       ];
       setFollowing(updatedLocalFollowing);
+      dispatch(
+        follow({
+          userId: user?.id,
+          followingId: postsUserId,
+          updatedLocalFollowing,
+        })
+      );
     }
   };
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(fetchPosts());
     if (user) {
-      setFollowing(user.following);
+      setFollowing(followingUser.userFollowing);
+      dispatch(fetchPosts(user.id));
     }
   }, [dispatch, user]);
 
