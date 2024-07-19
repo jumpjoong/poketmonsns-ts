@@ -175,7 +175,8 @@ $header-height: 150px;
     img {
       position: absolute;
       width: 50%;
-      object-fit: cover;
+      height: auto;
+      object-fit: contain;
     }
   }
 }

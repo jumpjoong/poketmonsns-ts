@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { PostsState } from "../_types/postsType";
 
 export const fetchPosts = createAsyncThunk("posts/ferchPosts", async () => {
-  const response = await fetch("/api/getposts", {
+  const response = await fetch("/api/posts", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

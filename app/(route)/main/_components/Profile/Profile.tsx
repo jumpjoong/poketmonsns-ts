@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import style from "@/app/_styles/profile.module.scss";
 import { useAppSelector } from "@/app/_hooks/hooks";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 function Profile() {
   const user = useAppSelector(state => state.user.user);
   const [badgeModModal, setBadgeModModal] = useState();
@@ -140,9 +141,19 @@ function Profile() {
           <div className={style.rep_wrap}>
             <div className={style.rep_ring}></div>
             {user.rep_motion_url == "" ? (
-              <img src="/img/poke_silueta.png" alt=""></img>
+              <Image
+                width={200}
+                height={200}
+                src="/img/poke_silueta.png"
+                alt=""
+              />
             ) : (
-              <img src={user.rep_motion_url} alt=""></img>
+              <Image
+                width={200}
+                height={200}
+                src={user.rep_motion_url}
+                alt=""
+              />
             )}
           </div>
         </aside>

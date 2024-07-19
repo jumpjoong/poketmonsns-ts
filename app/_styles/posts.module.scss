@@ -35,6 +35,7 @@ $mC: #e0666666;
       align-items: center;
       margin: 0 20px;
       .profile_img {
+        position: relative;
         width: 60px;
         height: 60px;
         background-color: #e0666633;
@@ -45,7 +46,8 @@ $mC: #e0666666;
         align-items: center;
         img {
           width: 80%;
-          object-fit: cover;
+          height: auto;
+          object-fit: contain;
         }
       }
       > div {
@@ -100,6 +102,8 @@ $mC: #e0666666;
     }
   }
   .detail {
+    white-space: break-spaces;
+    word-break: keep-all;
     width: 70%;
     margin: 10px 0;
     font-size: 22px;
