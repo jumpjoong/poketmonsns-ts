@@ -45,6 +45,7 @@ export async function GET(req: Request) {
           },
           include: {
             like_post: true,
+            author: true,
           },
         },
         my_poketmon: true,
@@ -62,7 +63,7 @@ export async function GET(req: Request) {
     });
     return new Response(JSON.stringify(userData));
   } catch (error) {
-    return console.error("Error handling request:", error);
+    return console.error(error);
   }
 }
 //포켓몬 구매 시 크레딧 업그레이드

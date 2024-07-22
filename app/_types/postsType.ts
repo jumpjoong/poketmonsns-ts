@@ -26,9 +26,12 @@ export interface Posts {
   author: Author;
   like_post: LikePostType[];
 }
+
 interface Author {
   user_id: number;
   id: number;
+  pro_img: string;
+  name: string;
 }
 
 interface PostAuthor {

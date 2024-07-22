@@ -11,7 +11,7 @@ import { useAppDispatch } from "@/app/_hooks/hooks";
 import {
   selectsEncyclopedia,
   selectsMyPosts,
-  selectsPost,
+  selectsBoard,
   selectsTrend,
   selectsWrite,
 } from "@/app/_store/mainContentsSlice";
@@ -23,7 +23,7 @@ function Nav() {
       <div className={style.nav_btn_wrap}>
         <div
           className={style.nav_home_btn}
-          onClick={() => dispatch(selectsPost())}
+          onClick={() => dispatch(selectsBoard())}
         >
           <Home
             sx={{ color: "rgba(224, 102, 102)", background: "transparent" }}

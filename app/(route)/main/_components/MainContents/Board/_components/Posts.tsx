@@ -7,12 +7,14 @@ import { PostsProps } from "@/_types/postsType";
 import { fetchPosts } from "@/app/_store/postsSlice";
 import { fetchUser } from "@/app/_store/userSlice";
 import Image from "next/image";
+
 interface AddIsFollow extends PostsProps {
-  isFollow: boolean;
-  userFollowHandler: (postsId: number, postsUserId: number) => void;
+  isFollow?: boolean;
+  userFollowHandler?: (postsId: number, postsUserId: number) => void;
   id?: string;
-  onEdit: (id: number, content: string, editMode: string) => void;
+  onEdit?: (id: number, content: string, editMode: string) => void;
 }
+
 const Posts = ({
   posts,
   isFollow,
@@ -64,11 +66,14 @@ const Posts = ({
         credit: user?.credit,
       }),
     });
-    dispatch(fetchPosts());
-    if (session?.user.accessToken) {
+    if (user && session?.user.accessToken) {
       dispatch(
-        fetchUser({ userId: user!.id, accessToken: session.user.accessToken })
+        fetchUser({
+          userId: user.id,
+          accessToken: session.user.accessToken,
+        })
       );
+      dispatch(fetchPosts(user.id));
     }
   };
 
@@ -82,12 +87,12 @@ const Posts = ({
               <Image
                 width="60"
                 height="60"
-                src={`/img/poke_profile_img/pokballpixel-${user.pro_img}.png`}
+                src={`/img/poke_profile_img/pokballpixel-${posts.author.pro_img}.png`}
                 alt=""
               />
             </div>
             <div>
-              <p className={style.user}>{user.name}</p>
+              <p className={style.user}>{posts.author.name}</p>
               <p className={style.date}>{date}</p>
             </div>
           </div>
@@ -122,12 +127,14 @@ const Posts = ({
                     : style.info_mod_btn_wrap
                 }
               >
-                <p
-                  className={style.follow}
-                  onClick={() => userFollowHandler(posts.user_id, posts.id)}
-                >
-                  {isFollow ? "언팔로우" : "팔로우"}
-                </p>
+                {userFollowHandler && (
+                  <p
+                    className={style.follow}
+                    onClick={() => userFollowHandler(posts.user_id, posts.id)}
+                  >
+                    {isFollow ? "언팔로우" : "팔로우"}
+                  </p>
+                )}
               </div>
             ) : (
               <div
@@ -137,15 +144,21 @@ const Posts = ({
                     : style.info_mod_btn_wrap
                 }
               >
-                <p
-                  className={style.update}
-                  onClick={() => onEdit(posts.id, posts.content, "editMode")}
-                >
-                  수정
-                </p>
-                <p className={style.remove} onClick={() => dataDelete()}>
-                  삭제
-                </p>
+                {onEdit && (
+                  <>
+                    <p
+                      className={style.update}
+                      onClick={() =>
+                        onEdit(posts.id, posts.content, "editMode")
+                      }
+                    >
+                      수정
+                    </p>
+                    <p className={style.remove} onClick={() => dataDelete()}>
+                      삭제
+                    </p>
+                  </>
+                )}
               </div>
             )}
           </div>

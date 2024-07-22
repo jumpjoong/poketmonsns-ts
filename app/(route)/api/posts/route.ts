@@ -11,6 +11,7 @@ export async function GET(req: Request) {
       },
       include: {
         like_post: true,
+        author: true,
       },
     }),
     prisma.user.findUnique({
