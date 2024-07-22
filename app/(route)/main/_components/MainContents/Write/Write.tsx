@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import style from "@/_styles/write.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
-import { selectsPost } from "@/app/_store/mainContentsSlice";
+import { selectsBoard } from "@/app/_store/mainContentsSlice";
 import { fetchUser } from "@/app/_store/userSlice";
 import { useSession } from "next-auth/react";
 type WriteType = {
@@ -42,10 +42,13 @@ function Write({ PostId, content, editMode }: WriteType) {
     }
     if (user?.id && session?.user.accessToken) {
       dispatch(
-        fetchUser({ userId: user.id, accessToken: session.user.accessToken })
+        fetchUser({
+          userId: user.id,
+          accessToken: session.user.accessToken,
+        })
       );
     }
-    dispatch(selectsPost());
+    dispatch(selectsBoard());
   };
   useEffect(() => {
     setText(content || "");

@@ -30,11 +30,14 @@ interface MyPoketmon {
 export interface Author {
   user_id: number;
   id: number;
+  pro_img: string;
+  name: string;
 }
 
 interface MyPosts {
   id: number;
   user_id: number;
+  pro_img: string;
   content: string;
   date: string;
   like_count: number;

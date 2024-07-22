@@ -41,8 +41,8 @@ model follow_table {
   id           Int   @id @default(autoincrement())
   follower_id  Int
   following_id Int
-  follower     user  @relation("followingRelation", fields: [follower_id], references: [id])
-  following    user  @relation("followersRelation", fields: [following_id], references: [id])
+  follower     user  @relation("followingRelation", fields: [follower_id], references: [id], onDelete: Cascade)
+  following    user  @relation("followersRelation", fields: [following_id], references: [id], onDelete: Cascade)
 
   @@unique([follower_id, following_id])
   @@index([follower_id], map: "follow_table_follower_id_fkey")
@@ -53,7 +53,7 @@ model have_poke {
   id      Int   @id @default(autoincrement())
   poke_id Int
   user_id Int
-  author  user   @relation(fields: [user_id], references: [id])
+  author  user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
   poke poke_table @relation(fields: [poke_id], references: [id])
 
   @@index([user_id], map: "have_poke_user_id_fkey")
@@ -66,7 +66,7 @@ model posts {
   content    String
   date       DateTime @default(now())
   like_count Int      @default(0)
-  author     user     @relation(fields: [user_id], references: [id])
+  author     user     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   like_post like_post[] 
   @@index([user_id], map: "list_table_user_id_fkey")
 }
@@ -75,10 +75,10 @@ model like_post {
   id      Int    @id @default(autoincrement())
   user_id Int
   post_id Int
-  user    user   @relation(fields: [user_id], references: [id])
+  user    user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
   post    posts  @relation(fields: [post_id], references: [id], onDelete: Cascade)
 
-    @@unique([user_id, post_id])
+  @@unique([user_id, post_id])
 }
 model favorite_table {
   id            Int    @id @unique

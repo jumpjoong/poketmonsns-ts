@@ -21,7 +21,6 @@ function Board({ onEdit }: BoardProps) {
   const userStatus = useAppSelector(state => state.user.status);
   const [followControl, setFollowControl] = useState(true);
   const [following, setFollowing] = useState<FollowingType[]>([]);
-
   const userFollowHandler = async (postsUserId: number, postsId: number) => {
     //following_id = 내가 팔로우 할 아이디
     //follwer_id = 자신
@@ -74,29 +73,32 @@ function Board({ onEdit }: BoardProps) {
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (user) {
-      setFollowing(followingUser.userFollowing);
       dispatch(fetchPosts(user.id));
     }
   }, [dispatch, user]);
-
+  useEffect(() => {
+    if (followingUser.status === "succeeded") {
+      setFollowing(followingUser.userFollowing);
+    }
+  }, [followingUser]);
   if (
     posts.posts === null ||
     posts.status === "loading" ||
     userStatus === null ||
     userStatus === "loading"
-  )
+  ) {
     return (
       <div className={style.load}>
         <Image
-          width="352"
-          height="300"
+          width={352}
+          height={300}
           priority
           src="/img/loadimg/pika_heart.webp"
           alt="로딩 이미지"
         />
       </div>
     );
-  else {
+  } else {
     return (
       <div className={style.postsBox}>
         <div className={style.posts_btn_box}>
@@ -116,7 +118,7 @@ function Board({ onEdit }: BoardProps) {
           </button>
         </div>
         <ul>
-          {posts === null ? (
+          {posts.posts.length === 0 ? (
             <li>글이 없습니다!</li>
           ) : followControl ? (
             posts &&
@@ -146,7 +148,6 @@ function Board({ onEdit }: BoardProps) {
                   key={posts.id}
                   isFollow={true}
                   userFollowHandler={userFollowHandler}
-                  onEdit={onEdit}
                 />
               ))
           )}

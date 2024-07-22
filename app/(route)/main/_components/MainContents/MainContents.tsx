@@ -8,6 +8,7 @@ import MyPosts from "./MyPosts/MyPosts";
 import Write from "./Write/Write";
 import Board from "./Board/Board";
 import { selectsWrite } from "@/app/_store/mainContentsSlice";
+import EditProfile from "./EditProfile/EditProfile";
 
 function MainContents() {
   const navSelectors = useAppSelector(state => state.mainContents);
@@ -48,6 +49,9 @@ function MainContents() {
       ) : (
         <Write />
       );
+    }
+    case "EDITPROFILE": {
+      return <EditProfile />;
     }
     default:
       return <Board onEdit={handleEdit} />;

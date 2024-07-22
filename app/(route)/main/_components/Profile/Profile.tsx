@@ -1,12 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import style from "@/app/_styles/profile.module.scss";
-import { useAppSelector } from "@/app/_hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
+import { selectsEditProfile } from "@/app/_store/mainContentsSlice";
 function Profile() {
   const user = useAppSelector(state => state.user.user);
   const [badgeModModal, setBadgeModModal] = useState();
+  const dispatch = useAppDispatch();
   const [mylist, setMylist] = useState([]);
   const BadgeFunc = (key: number) => {
     console.log(key);
@@ -20,9 +22,8 @@ function Profile() {
     //   data: badges,
     // });
   };
-  const profileBtnClick = () => {
-    // if (pageStatus !== "NEWBIE") setPageStatus("PROFILE");
-    console.log(user);
+  const editProfileHandler = () => {
+    dispatch(selectsEditProfile());
   };
   const followBtnClick = () => {
     // if (pageStatus !== "NEWBIE") setPageStatus("FOLLOW");
@@ -127,7 +128,7 @@ function Profile() {
               </div>
             </div>
             <div className={style.profile_menu_wrap}>
-              <p onClick={profileBtnClick}>프로필 수정</p>
+              <p onClick={editProfileHandler}>프로필 수정</p>
               <p onClick={followBtnClick}>팔로우</p>
               <p
                 onClick={() => {
