@@ -1,6 +1,5 @@
 import { verifyJwt } from "@/app/_lib/jwt/jwt";
 import prisma from "prisma/prisma";
-import { stringify } from "querystring";
 
 export async function GET(
   req: Request,

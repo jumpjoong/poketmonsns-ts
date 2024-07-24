@@ -3,7 +3,6 @@ import { fetchPosts, follow, unfollow } from "@/app/_store/postsSlice";
 import React, { useEffect, useState } from "react";
 import style from "@/_styles/board.module.scss";
 import Posts from "./_components/Posts";
-import { Author } from "@/app/_types/userType";
 import Image from "next/image";
 type FollowingType = {
   id: number;
@@ -14,14 +13,21 @@ type FollowingType = {
 type BoardProps = {
   onEdit: (id: number, content: string, editMode: string) => void;
 };
+
 function Board({ onEdit }: BoardProps) {
   const user = useAppSelector(state => state.user.user);
   const posts = useAppSelector(state => state.posts);
   const followingUser = useAppSelector(state => state.following);
+  const [following, setFollowing] = useState<FollowingType[]>([]); //서버와 통신하기 싫어서 만듦
   const userStatus = useAppSelector(state => state.user.status);
-  const [followControl, setFollowControl] = useState(true);
-  const [following, setFollowing] = useState<FollowingType[]>([]);
-  const userFollowHandler = async (postsUserId: number, postsId: number) => {
+  const [followControl, setFollowControl] = useState(true); //전체글, 팔로우 글
+  const dispatch = useAppDispatch();
+
+  const userFollowHandler = async (
+    postsUserId: number,
+    postsId: number,
+    postsUserData: {}
+  ) => {
     //following_id = 내가 팔로우 할 아이디
     //follwer_id = 자신
     //postsUserId = 클릭한 posts의 userId
@@ -42,6 +48,7 @@ function Board({ onEdit }: BoardProps) {
         follow => follow.following_id !== postsUserId
       );
       setFollowing(updatedLocalFollowing);
+      //팔로우 리스트 컴포넌트에서 사용 중이여서 store값도 업데이트 해줘야함
       dispatch(
         unfollow({
           userId: user?.id,
@@ -57,10 +64,11 @@ function Board({ onEdit }: BoardProps) {
           id: postsId,
           follower_id: user!.id,
           following_id: postsUserId,
-          following: {} as Author,
+          following: postsUserData,
         },
       ];
       setFollowing(updatedLocalFollowing);
+      //팔로우 리스트 컴포넌트에서 사용 중이여서 store값도 업데이트 해줘야함
       dispatch(
         follow({
           userId: user?.id,
@@ -70,13 +78,14 @@ function Board({ onEdit }: BoardProps) {
       );
     }
   };
-  const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (user) {
       dispatch(fetchPosts(user.id));
     }
   }, [dispatch, user]);
   useEffect(() => {
+    //초깃값 설정하는 대체제를 이거보다 좋은 방법을 모르겠음...
     if (followingUser.status === "succeeded") {
       setFollowing(followingUser.userFollowing);
     }

@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import prisma from "prisma/prisma";
 
 //유저 닉네임 변경

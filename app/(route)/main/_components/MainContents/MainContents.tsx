@@ -9,6 +9,7 @@ import Write from "./Write/Write";
 import Board from "./Board/Board";
 import { selectsWrite } from "@/app/_store/mainContentsSlice";
 import EditProfile from "./EditProfile/EditProfile";
+import Following from "./Following/Following";
 
 function MainContents() {
   const navSelectors = useAppSelector(state => state.mainContents);
@@ -27,19 +28,19 @@ function MainContents() {
   };
 
   switch (navSelectors) {
-    case "POSTS": {
+    case "Board": {
       return <Board onEdit={handleEdit} />;
     }
-    case "TREND": {
+    case "Trend": {
       return <Trend />;
     }
-    case "ENCYCLOPEDIA": {
+    case "Encyclopedia": {
       return <Encyclopedia />;
     }
-    case "MYPOSTS": {
+    case "MyPost": {
       return <MyPosts />;
     }
-    case "WRITE": {
+    case "Write": {
       return editMode ? (
         <Write
           PostId={editPost?.PostId}
@@ -50,8 +51,11 @@ function MainContents() {
         <Write />
       );
     }
-    case "EDITPROFILE": {
+    case "EditProfile": {
       return <EditProfile />;
+    }
+    case "Following": {
+      return <Following />;
     }
     default:
       return <Board onEdit={handleEdit} />;

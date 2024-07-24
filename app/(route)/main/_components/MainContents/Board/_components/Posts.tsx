@@ -10,7 +10,11 @@ import Image from "next/image";
 
 interface AddIsFollow extends PostsProps {
   isFollow?: boolean;
-  userFollowHandler?: (postsId: number, postsUserId: number) => void;
+  userFollowHandler?: (
+    postsId: number,
+    postsUserId: number,
+    postsUserData: {}
+  ) => void;
   id?: string;
   onEdit?: (id: number, content: string, editMode: string) => void;
 }
@@ -29,9 +33,9 @@ const Posts = ({
   const [isLike, setIsLike] = useState(
     posts.like_post.some(obj => obj.user_id === user?.id)
   );
+
   const date = moment(posts.date).utc().tz("Asia/Seoul").fromNow();
   const dispatch = useAppDispatch();
-
   const handleLike = async () => {
     // 좋아요 컨트롤
     const response = await fetch(`/api/likecount`, {
@@ -56,7 +60,7 @@ const Posts = ({
     }
   };
   const dataDelete = async () => {
-    //데이터 삭제
+    //글 삭제
     await fetch(`/api/posts`, {
       method: "POST",
       body: JSON.stringify({
@@ -130,7 +134,9 @@ const Posts = ({
                 {userFollowHandler && (
                   <p
                     className={style.follow}
-                    onClick={() => userFollowHandler(posts.user_id, posts.id)}
+                    onClick={() =>
+                      userFollowHandler(posts.user_id, posts.id, posts.author)
+                    }
                   >
                     {isFollow ? "언팔로우" : "팔로우"}
                   </p>

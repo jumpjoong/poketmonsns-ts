@@ -1,4 +1,4 @@
-import { FollowingType } from "./userType";
+import { Author, FollowingType } from "./userType";
 
 //postsSlice.tsx
 export interface PostsState {
@@ -25,13 +25,6 @@ export interface Posts {
   like_count: number;
   author: Author;
   like_post: LikePostType[];
-}
-
-interface Author {
-  user_id: number;
-  id: number;
-  pro_img: string;
-  name: string;
 }
 
 interface PostAuthor {

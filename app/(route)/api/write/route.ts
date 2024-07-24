@@ -1,4 +1,5 @@
-import prisma from "../../../../prisma/prisma";
+import prisma from "prisma/prisma";
+
 export async function POST(req: Request) {
   const body = await req.json();
   if (body.edit) {

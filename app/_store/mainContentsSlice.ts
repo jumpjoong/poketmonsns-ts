@@ -4,12 +4,13 @@ const mainContentsSlice = createSlice({
   name: "mainContents",
   initialState: "",
   reducers: {
-    selectsBoard: () => "BOARD",
-    selectsTrend: () => "TREND",
-    selectsEncyclopedia: () => "ENCYCLOPEDIA",
-    selectsMyPosts: () => "MYPOSTS",
-    selectsWrite: () => "WRITE",
-    selectsEditProfile: () => "EDITPROFILE",
+    selectsBoard: () => "Board",
+    selectsTrend: () => "Trend",
+    selectsEncyclopedia: () => "Encyclopedia",
+    selectsMyPosts: () => "MyPost",
+    selectsWrite: () => "Write",
+    selectsEditProfile: () => "EditProfile",
+    selectsFollowing: () => "Following",
   },
 });
 
@@ -21,4 +22,5 @@ export const {
   selectsMyPosts,
   selectsWrite,
   selectsEditProfile,
+  selectsFollowing,
 } = mainContentsSlice.actions;
