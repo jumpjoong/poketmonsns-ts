@@ -1,4 +1,5 @@
-import prisma from "../../../../prisma/prisma";
+import prisma from "prisma/prisma";
+
 const bcrypt = require("bcrypt");
 
 interface RequestBody {

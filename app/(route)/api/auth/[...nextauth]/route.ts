@@ -36,15 +36,6 @@ const handler = NextAuth({
         } else {
           throw new Error(user.error);
         }
-        // if (user) {
-        //   return user;
-        // } else {
-        //   return NextResponse.json(
-        //     { error: "아이디 및 비밀번호를 확인해주세요" },
-        //     { status: 401 }
-        //   );
-        // }
-        return user;
       },
     }),
   ],
@@ -58,30 +49,8 @@ const handler = NextAuth({
     },
     // 세션에 로그인한 유저 데이터 입력
     async session({ session, token }) {
-      // const email = session.user.email as string;
-      // try {
-      //   const exUser = await prisma.user_table.findUnique({
-      //     where: { email },
-      //     select: { id: true, email: true, name: true, pro_img: true },
-      //   });
-      //   // 로그인한 유저 데이터 재정의
-      //   // 단, 기존에 "user"의 형태가 정해져있기 때문에 변경하기 위해서는 타입 재정의가 필요함
-      //   //exUser = { id : 1 }
-      //   //session.user = {name:undefined, email:1234@1234, image:undefined,}
-      //   //sesison타입 기본값 교체하려면 User타입에서 확인해서 작업하면 됨
-      //   if (exUser) {
-      //     // session.user = {
-      //   id: exUser.id.toString(),
-      //   email: exUser.email,
-      //   name: exUser.name,
-      // };
       session.user = token as any;
-      // }
-      // 여기서 반환한 session값이 "useSession()"의 "data"값이 됨
       return session;
-      // } catch (err) {
-      //   console.log(err);
-      // }
     },
   },
 } as NextAuthOptions);

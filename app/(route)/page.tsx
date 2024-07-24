@@ -5,8 +5,7 @@ import React, { useState } from "react";
 import style from "@/app/_styles/sign.module.scss";
 
 export default function Home() {
-  //session을 없애면 에러가 나옴 구조 분해 할당으로 인해서?
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   //false일 때 로그인, true일 때 회원가입폼
   const [loginRegister, setloginRegister] = useState(false);
   const [email, setEmail] = useState("");
@@ -87,7 +86,7 @@ export default function Home() {
             value={pw}
             onChange={onPwHandler}
           ></input>
-          {errorHandling}
+          <p className={style.error_detail}>{errorHandling}</p>
           {loginRegister ? <button>회원가입</button> : <button>로그인</button>}
         </form>
         <p onClick={loginRegisterHandler}>

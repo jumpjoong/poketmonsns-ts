@@ -4,7 +4,10 @@ import style from "@/app/_styles/profile.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
-import { selectsEditProfile } from "@/app/_store/mainContentsSlice";
+import {
+  selectsEditProfile,
+  selectsFollowing,
+} from "@/app/_store/mainContentsSlice";
 function Profile() {
   const user = useAppSelector(state => state.user.user);
   const [badgeModModal, setBadgeModModal] = useState();
@@ -25,8 +28,8 @@ function Profile() {
   const editProfileHandler = () => {
     dispatch(selectsEditProfile());
   };
-  const followBtnClick = () => {
-    // if (pageStatus !== "NEWBIE") setPageStatus("FOLLOW");
+  const followBtnHandler = () => {
+    dispatch(selectsFollowing());
   };
   return (
     <>
@@ -129,7 +132,7 @@ function Profile() {
             </div>
             <div className={style.profile_menu_wrap}>
               <p onClick={editProfileHandler}>프로필 수정</p>
-              <p onClick={followBtnClick}>팔로우</p>
+              <p onClick={followBtnHandler}>팔로잉</p>
               <p
                 onClick={() => {
                   signOut({ callbackUrl: "/", redirect: true });

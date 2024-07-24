@@ -28,10 +28,14 @@ interface MyPoketmon {
 }
 //board.tsx
 export interface Author {
-  user_id: number;
   id: number;
   pro_img: string;
   name: string;
+  email: string;
+  rep: number;
+  rep_motion_url: string;
+  credit: number;
+  badge_list: JSON;
 }
 
 interface MyPosts {
@@ -51,7 +55,7 @@ export interface FollowerType {
   following_id: number;
   follower: Author;
 }
-
+//postsType
 export interface FollowingType {
   id: number;
   follower_id: number;
