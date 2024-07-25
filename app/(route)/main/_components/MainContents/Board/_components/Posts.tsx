@@ -7,13 +7,14 @@ import { PostsProps } from "@/_types/postsType";
 import { fetchPosts } from "@/app/_store/postsSlice";
 import { fetchUser } from "@/app/_store/userSlice";
 import Image from "next/image";
+import { Author } from "@/app/_types/userType";
 
 interface AddIsFollow extends PostsProps {
   isFollow?: boolean;
   userFollowHandler?: (
     postsId: number,
     postsUserId: number,
-    postsUserData: {}
+    postsUserData: Author
   ) => void;
   id?: string;
   onEdit?: (id: number, content: string, editMode: string) => void;

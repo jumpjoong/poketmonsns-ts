@@ -12,7 +12,6 @@ export async function POST(req: Request) {
         },
       },
     });
-    console.log(likePostCheck);
     if (likePostCheck) {
       // 이미 좋아요 한 경우 좋아요 포스트 삭제
       await prisma.like_post.delete({

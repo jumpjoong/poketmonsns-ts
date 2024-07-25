@@ -32,7 +32,7 @@ function MainContents() {
       return <Board onEdit={handleEdit} />;
     }
     case "Trend": {
-      return <Trend />;
+      return <Trend onEdit={handleEdit} />;
     }
     case "Encyclopedia": {
       return <Encyclopedia />;
