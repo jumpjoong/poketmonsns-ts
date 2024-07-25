@@ -63,7 +63,7 @@ export async function GET(req: Request) {
     });
     return new Response(JSON.stringify(userData));
   } catch (error) {
-    return console.error(error);
+    return new Response(JSON.stringify(error));
   }
 }
 //포켓몬 구매 시 크레딧 업그레이드

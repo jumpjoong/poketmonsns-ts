@@ -7,6 +7,7 @@ import {
   poketModalControlReducer,
   selectPoketmonReducer,
 } from "./encyclopediaSlice";
+import { localFollowReducer } from "./followSlice";
 const store = configureStore({
   reducer: {
     user: userReducer,
@@ -16,6 +17,7 @@ const store = configureStore({
     selectPoket: selectPoketmonReducer,
     moreDetail: moreDetailReducer,
     following: followingReducer,
+    localFollowReducer: localFollowReducer,
   },
 });
 

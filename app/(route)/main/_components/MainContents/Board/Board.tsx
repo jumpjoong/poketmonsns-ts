@@ -4,6 +4,13 @@ import React, { useEffect, useState } from "react";
 import style from "@/_styles/board.module.scss";
 import Posts from "./_components/Posts";
 import Image from "next/image";
+import {
+  updateLocalFollow,
+  localUnfollow,
+  setInitialLocalFollowing,
+} from "@/app/_store/followSlice";
+import { Author } from "@/app/_types/userType";
+import { useUserFollowHandler } from "@/app/_hooks/useUserFollowHandler";
 type FollowingType = {
   id: number;
   follower_id: number;
@@ -18,66 +25,14 @@ function Board({ onEdit }: BoardProps) {
   const user = useAppSelector(state => state.user.user);
   const posts = useAppSelector(state => state.posts);
   const followingUser = useAppSelector(state => state.following);
-  const [following, setFollowing] = useState<FollowingType[]>([]); //서버와 통신하기 싫어서 만듦
+  const localFollow = useAppSelector(
+    state => state.localFollowReducer.following
+  );
+  // const [following, setFollowing] = useState<FollowingType[]>([]); //서버와 통신하기 싫어서 만듦
   const userStatus = useAppSelector(state => state.user.status);
   const [followControl, setFollowControl] = useState(true); //전체글, 팔로우 글
   const dispatch = useAppDispatch();
-
-  const userFollowHandler = async (
-    postsUserId: number,
-    postsId: number,
-    postsUserData: {}
-  ) => {
-    //following_id = 내가 팔로우 할 아이디
-    //follwer_id = 자신
-    //postsUserId = 클릭한 posts의 userId
-    await fetch(`/api/follow`, {
-      method: "POST",
-      body: JSON.stringify({
-        following_id: postsUserId,
-        follower_id: user?.id,
-      }),
-    });
-    //isFollowing = 팔로우 중인지 boolean으로 반환
-    const isFollowing = following.some(
-      follow => follow.following_id === postsUserId
-    );
-    if (isFollowing) {
-      //언팔
-      const updatedLocalFollowing = following.filter(
-        follow => follow.following_id !== postsUserId
-      );
-      setFollowing(updatedLocalFollowing);
-      //팔로우 리스트 컴포넌트에서 사용 중이여서 store값도 업데이트 해줘야함
-      dispatch(
-        unfollow({
-          userId: user?.id,
-          followingId: postsUserId,
-          updatedLocalFollowing,
-        })
-      );
-    } else {
-      //팔로우 로직
-      const updatedLocalFollowing = [
-        ...following,
-        {
-          id: postsId,
-          follower_id: user!.id,
-          following_id: postsUserId,
-          following: postsUserData,
-        },
-      ];
-      setFollowing(updatedLocalFollowing);
-      //팔로우 리스트 컴포넌트에서 사용 중이여서 store값도 업데이트 해줘야함
-      dispatch(
-        follow({
-          userId: user?.id,
-          followingId: postsUserId,
-          updatedLocalFollowing,
-        })
-      );
-    }
-  };
+  const userFollowHandler = useUserFollowHandler();
 
   useEffect(() => {
     if (user) {
@@ -87,7 +42,8 @@ function Board({ onEdit }: BoardProps) {
   useEffect(() => {
     //초깃값 설정하는 대체제를 이거보다 좋은 방법을 모르겠음...
     if (followingUser.status === "succeeded") {
-      setFollowing(followingUser.userFollowing);
+      // setFollowing(followingUser.userFollowing);
+      dispatch(setInitialLocalFollowing(followingUser.userFollowing));
     }
   }, [followingUser]);
   if (
@@ -137,19 +93,19 @@ function Board({ onEdit }: BoardProps) {
                 key={posts.id}
                 id={`post-${posts.id}`}
                 isFollow={
-                  following.some(obj => obj.following_id === posts.user_id) ||
+                  localFollow.some(obj => obj.following_id === posts.user_id) ||
                   false
                 }
                 userFollowHandler={userFollowHandler}
                 onEdit={onEdit}
               />
             ))
-          ) : following.length === 0 ? (
+          ) : localFollow.length === 0 ? (
             <li>팔로잉을 한 사람이 없습니다! 팔로잉을 해주세요!</li>
           ) : (
             posts.posts
               .filter(posts =>
-                following.some(obj => posts.user_id === obj.following_id)
+                localFollow.some(obj => posts.user_id === obj.following_id)
               )
               .map(posts => (
                 <Posts
