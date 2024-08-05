@@ -1,21 +1,11 @@
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
-import { fetchPosts, follow, unfollow } from "@/app/_store/postsSlice";
+import { fetchPosts } from "@/app/_store/postsSlice";
 import React, { useEffect, useState } from "react";
 import style from "@/_styles/board.module.scss";
 import Posts from "./_components/Posts";
 import Image from "next/image";
-import {
-  updateLocalFollow,
-  localUnfollow,
-  setInitialLocalFollowing,
-} from "@/app/_store/followSlice";
-import { Author } from "@/app/_types/userType";
+import { setInitialLocalFollowing } from "@/app/_store/followSlice";
 import { useUserFollowHandler } from "@/app/_hooks/useUserFollowHandler";
-type FollowingType = {
-  id: number;
-  follower_id: number;
-  following_id: number;
-};
 
 type BoardProps = {
   onEdit: (id: number, content: string, editMode: string) => void;
@@ -28,7 +18,6 @@ function Board({ onEdit }: BoardProps) {
   const localFollow = useAppSelector(
     state => state.localFollowReducer.following
   );
-  // const [following, setFollowing] = useState<FollowingType[]>([]); //서버와 통신하기 싫어서 만듦
   const userStatus = useAppSelector(state => state.user.status);
   const [followControl, setFollowControl] = useState(true); //전체글, 팔로우 글
   const dispatch = useAppDispatch();

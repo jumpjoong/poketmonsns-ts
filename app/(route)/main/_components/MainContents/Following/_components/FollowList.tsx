@@ -9,7 +9,12 @@ interface favoriteUserType {
 
 function FollowList({ following }: favoriteUserType) {
   const user = useAppSelector(state => state.user.user);
-  const [followList, setFollowList] = useState(true);
+  const localFollowList = useAppSelector(
+    state => state.localFollowReducer.following
+  );
+  const [followList, setFollowList] = useState(
+    localFollowList.some(obj => obj.following.id === following.id)
+  );
 
   const followHandler = async (following: Author) => {
     setFollowList(!followList);

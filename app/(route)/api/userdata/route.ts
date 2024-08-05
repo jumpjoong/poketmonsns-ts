@@ -51,12 +51,42 @@ export async function GET(req: Request) {
         my_poketmon: true,
         followers: {
           include: {
-            follower: true,
+            follower: {
+              select: {
+                pro_img: true,
+                name: true,
+                rep: true,
+                rep_motion_url: true,
+                credit: true,
+                badge_list: true,
+              },
+            },
           },
         },
         following: {
           include: {
-            following: true,
+            following: {
+              select: {
+                pro_img: true,
+                name: true,
+                rep: true,
+                rep_motion_url: true,
+                credit: true,
+                badge_list: true,
+                followers: {
+                  include: {
+                    follower: {
+                      select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        pro_img: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },

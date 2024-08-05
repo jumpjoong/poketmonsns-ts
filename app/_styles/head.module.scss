@@ -17,7 +17,7 @@ $header-height: 150px;
   height: $header-height;
   display: flex;
   align-items: center;
-  div {
+  > div {
     border-left: 1px solid rgba(224, 102, 102, 0.4);
     border-right: 1px solid rgba(224, 102, 102, 0.4);
     height: 100%;
@@ -78,11 +78,16 @@ $header-height: 150px;
   }
   .search {
     width: 400px;
-    p {
+
+    span {
+      position: relative;
       height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
+      &.on {
+        flex-direction: column;
+      }
       .follow_search_bar {
         width: 320px;
         height: 50px;
@@ -91,6 +96,40 @@ $header-height: 150px;
         padding: 25px;
         margin: 50px 30px 0 0;
         background-color: transparent;
+        &.on {
+          border-radius: 25px 25px 0 0;
+        }
+      }
+      .searchDiv {
+        height: auto;
+        width: 320px;
+        position: absolute;
+        left: 24px;
+        top: 80%;
+        z-index: 999;
+        padding: 0 0 0 25px;
+        background-color: #fffbef;
+        border-style: solid;
+        border-color: rgba(224, 102, 102, 0.4);
+        border-top: none;
+        .following_div {
+          margin-bottom: 15px;
+          &:hover {
+            > p {
+              text-decoration: underline;
+              cursor: pointer;
+            }
+          }
+        }
+        .more_search {
+          padding-right: 25px;
+          text-align: center;
+          margin-bottom: 15px;
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
       }
     }
   }

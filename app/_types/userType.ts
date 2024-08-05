@@ -26,7 +26,7 @@ interface MyPoketmon {
   user_id: number;
   author: Author;
 }
-//board.tsx
+
 export interface Author {
   id: number;
   pro_img: string;
@@ -36,8 +36,15 @@ export interface Author {
   rep_motion_url: string;
   credit: number;
   badge_list: JSON;
+  followers: FollowerDetailType[];
 }
 
+interface FollowerDetailType {
+  id: number;
+  email: string;
+  name: string;
+  pro_img: string;
+}
 interface MyPosts {
   id: number;
   user_id: number;

@@ -12,7 +12,7 @@ const localFollowinitialState: FollowState = {
   status: "idle",
   error: null,
 };
-
+//로컬에서 관리하는 팔로우 로직
 const localFollowSlice = createSlice({
   name: "follow",
   initialState: localFollowinitialState,

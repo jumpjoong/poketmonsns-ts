@@ -8,6 +8,7 @@ import {
   selectPoketmonReducer,
 } from "./encyclopediaSlice";
 import { localFollowReducer } from "./followSlice";
+import searchUserNameReducer from "./searchUserName";
 const store = configureStore({
   reducer: {
     user: userReducer,
@@ -18,6 +19,7 @@ const store = configureStore({
     moreDetail: moreDetailReducer,
     following: followingReducer,
     localFollowReducer: localFollowReducer,
+    searchUserName: searchUserNameReducer,
   },
 });
 
