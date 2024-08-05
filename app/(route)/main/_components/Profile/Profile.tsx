@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "@/app/_styles/profile.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import { signOut } from "next-auth/react";
@@ -8,16 +8,19 @@ import {
   selectsEditProfile,
   selectsFollowing,
 } from "@/app/_store/mainContentsSlice";
+import { setSearchQuery } from "@/app/_store/searchUserName";
 function Profile() {
   const user = useAppSelector(state => state.user.user);
-  const [badgeModModal, setBadgeModModal] = useState();
+  const [badgeModModal, setBadgeModModal] = useState(false);
   const dispatch = useAppDispatch();
   const [mylist, setMylist] = useState([]);
+
   const BadgeFunc = (key: number) => {
-    console.log(key);
+    console.log(user?.badge_list);
+    setBadgeModModal(!badgeModModal);
   };
+
   const selectBadge = (key: HTMLElement) => {
-    // setBadgeModModal(false);
     // badges[prekey] = key;
     // // 이걸 서버로 전송해야함
     // axios.put("/api/auth/who", {
@@ -25,12 +28,21 @@ function Profile() {
     //   data: badges,
     // });
   };
+
   const editProfileHandler = () => {
     dispatch(selectsEditProfile());
   };
+
   const followBtnHandler = () => {
+    dispatch(setSearchQuery(""));
     dispatch(selectsFollowing());
   };
+
+  useEffect(() => {
+    if (user) {
+      setMylist(user.badge_list);
+    }
+  }, [user]);
   return (
     <>
       {user && (

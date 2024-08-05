@@ -23,12 +23,6 @@ function Trend({ onEdit }: BoardProps) {
     const test = async () => {
       if (user && posts !== null) {
         await dispatch(fetchPosts(user.id));
-        //여기를 어째 조지노 하..
-        // const sortPosts = [...posts].sort(
-        //   (a, b) => b.like_count - a.like_count
-        // );
-        // const slicePosts = sortPosts.slice(0, 5);
-        // setHotPosts(slicePosts);
       }
       setRender(true);
     };
