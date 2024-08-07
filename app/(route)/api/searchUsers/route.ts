@@ -20,12 +20,34 @@ export async function GET(req: Request) {
         name: true,
         email: true,
         pro_img: true,
+        followers: {
+          include: {
+            follower: {
+              select: {
+                pro_img: true,
+                name: true,
+                rep: true,
+                rep_motion_url: true,
+                credit: true,
+                badge_list: true,
+              },
+            },
+          },
+        },
       },
     });
-
+    const matchingUser = matchingUsers.map(user => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        pro_img: user.pro_img,
+        followers: user.followers,
+      };
+    });
     return new Response(
       JSON.stringify({
-        matchingUsers,
+        matchingUser,
       })
     );
   } catch (error) {
