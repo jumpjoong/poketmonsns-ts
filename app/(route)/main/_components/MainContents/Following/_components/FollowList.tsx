@@ -26,6 +26,7 @@ function FollowList({ following }: favoriteUserType) {
       }),
     });
   };
+
   return (
     <div key={following.id} className={style.follow_list}>
       <div className={style.follow_list_pro_img}>

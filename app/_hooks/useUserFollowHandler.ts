@@ -15,6 +15,7 @@ export const useUserFollowHandler = () => {
     postsId: number,
     postsUserData: Author
   ) => {
+    console.log(postsUserData);
     //following_id = 내가 팔로우 할 아이디
     //follwer_id = 자신
     //postsUserId = 클릭한 posts의 userId
@@ -35,7 +36,7 @@ export const useUserFollowHandler = () => {
       const updatedLocalFollowing = localFollow.filter(
         follow => follow.following_id !== postsUserId
       );
-      // setFollowing(updatedLocalFollowing);
+
       dispatch(localUnfollow({ followingId: postsUserId }));
       //팔로우 리스트 컴포넌트에서 사용 중이여서 store값도 업데이트 해줘야함
       dispatch(
@@ -55,7 +56,7 @@ export const useUserFollowHandler = () => {
       };
 
       const updatedLocalFollowing = [...localFollow, followData];
-      // setFollowing(updatedLocalFollowing);
+
       dispatch(updateLocalFollow(updatedLocalFollowing));
       //팔로우 리스트 컴포넌트에서 사용 중이여서 store값도 업데이트 해줘야함
       dispatch(

@@ -49,10 +49,10 @@ function Following() {
           );
           setDisplayUsers(uniqueUsers);
         } else {
-          console.error("Failed to fetch search results");
+          console.error("검색 결과 없음");
         }
       } catch (error) {
-        console.error("Error fetching search results:", error);
+        console.error(error);
       }
     };
     fetchAndMergeResults();
@@ -62,7 +62,7 @@ function Following() {
   }, [searchQuery, userFollowing, user]);
 
   if (userFollowing.length === 0) {
-    return <p>팔로우 유저가 없습니다</p>;
+    return <p>팔로우한 유저가 없습니다</p>;
   } else {
     return displayUser.map(following => {
       return <FollowList following={following} key={following.id} />;

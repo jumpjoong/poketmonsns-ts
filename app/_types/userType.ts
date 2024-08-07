@@ -37,9 +37,10 @@ export interface Author {
   credit: number;
   badge_list: JSON;
   followers: FollowerDetailType[];
+  following: FollowingType[];
 }
 
-interface FollowerDetailType {
+export interface FollowerDetailType {
   id: number;
   email: string;
   name: string;
