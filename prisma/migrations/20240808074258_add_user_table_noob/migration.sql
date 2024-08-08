@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `user` ADD COLUMN `noob` BOOLEAN NOT NULL DEFAULT true;

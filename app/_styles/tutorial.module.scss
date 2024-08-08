@@ -1,0 +1,81 @@
+$height: 150px;
+
+.tuto_first {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  > p {
+    font-size: 1.5rem;
+    color: #e36e6e;
+    line-height: 4;
+  }
+  .tuto_wrap {
+    display: flex;
+    .tuto_img_wrap {
+      width: 30%;
+      margin: 20px;
+      padding: 20px;
+      background-color: #e36e6e44;
+      border-radius: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      img {
+        width: 100%;
+        object-fit: cover;
+      }
+      figcaption {
+        margin-top: 20px;
+        font-size: 1em;
+      }
+    }
+  }
+}
+.tuto_second {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  > p {
+    margin-bottom: 30px;
+    font-family: NanumSquareRoundBold;
+    font-size: 1.5em;
+  }
+  .tuto_second_form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 100px;
+    > p {
+      input {
+        width: 200px;
+        height: 40px;
+        border: 1px solid #e36e6e;
+        border-radius: 20px;
+        background-color: transparent;
+        color: #e36e6e;
+        padding: 0 20px;
+        margin: 20px 0;
+        &::placeholder {
+          color: #e36e6e;
+        }
+      }
+      button {
+        width: 80px;
+        height: 40px;
+        border: 1px solid #e36e6e;
+        border-radius: 20px;
+        padding: 0 20px;
+        background-color: #e36e6e;
+        color: #fffbef;
+      }
+    }
+  }
+}

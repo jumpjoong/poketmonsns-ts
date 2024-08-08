@@ -4,6 +4,7 @@ import prisma from "prisma/prisma";
 export async function GET(req: Request) {
   const searchParams = new URL(req.url).searchParams;
   const userId = Number(searchParams.get("userId"));
+
   //직접적인 주소로 접근한다면 error 반환 아마 커스텀 페이지 필요할 듯(잘못된 페이지로 접속 시 {"error":"잘못된 접근 방식입니다. 원래 페이지로 돌아가주세요."} 이렇게뜸)
   try {
     const accessToken = req.headers.get("authorization");
@@ -39,6 +40,7 @@ export async function GET(req: Request) {
         rep: true,
         rep_motion_url: true,
         badge_list: true,
+        noob: true,
         my_posts: {
           orderBy: {
             date: "desc",
