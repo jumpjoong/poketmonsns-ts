@@ -182,7 +182,7 @@ function Header() {
     setLocalFilterFollowing([]);
     setShowSearchDiv(false);
   };
-  console.log(localFilterFollowing);
+
   return (
     <header className={style.header}>
       <div className={style.logo_btn}>
