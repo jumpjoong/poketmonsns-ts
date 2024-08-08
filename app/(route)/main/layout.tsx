@@ -16,7 +16,7 @@ function layout({ children }: Props) {
     //로그인 안하고 접속 시 바로 이동
     if (status === "unauthenticated") {
       location.replace("/");
-    } else if (status === "authenticated" && session?.user?.accessToken) {
+    } else if (status === "authenticated" && session.user.accessToken) {
       // 인증되었고 access 토큰이 있을경우 실행
       dispatch(
         fetchUser({

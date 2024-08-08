@@ -2,31 +2,51 @@
 import React, { useEffect, useState } from "react";
 import style from "@/app/_styles/profile.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import {
   selectsEditProfile,
   selectsFollowing,
 } from "@/app/_store/mainContentsSlice";
 import { setSearchQuery } from "@/app/_store/searchUserName";
+
 function Profile() {
+  const { data: session, status } = useSession();
   const user = useAppSelector(state => state.user.user);
   const [badgeModModal, setBadgeModModal] = useState(false);
+  const [selectBadgeIndex, setSelectBadgeIndex] = useState<number>(-1);
+  const [mylist, setMylist] = useState<number[]>([]);
+  const [badgeList, setBadgeList] = useState<number[]>([]);
   const dispatch = useAppDispatch();
-  const [mylist, setMylist] = useState([]);
-
   const BadgeFunc = (key: number) => {
-    console.log(user?.badge_list);
+    setSelectBadgeIndex(key);
     setBadgeModModal(!badgeModModal);
   };
+  console.log(badgeList);
+  const selectBadge = async (key: number) => {
+    if (user) {
+      const updateBadge: number[] = [...badgeList];
 
-  const selectBadge = (key: HTMLElement) => {
-    // badges[prekey] = key;
-    // // 이걸 서버로 전송해야함
-    // axios.put("/api/auth/who", {
-    //   id: who.id,
-    //   data: badges,
-    // });
+      updateBadge[selectBadgeIndex] = key;
+      console.log(updateBadge);
+      const response = await fetch(`/api/changeprofilebadge`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: user.id,
+          badge_list: updateBadge,
+        }),
+      });
+      const res = await response.json();
+
+      if (res.ok) {
+        setBadgeList(res.data.badge_list);
+      } else {
+        console.log("에러");
+      }
+    }
   };
 
   const editProfileHandler = () => {
@@ -40,7 +60,9 @@ function Profile() {
 
   useEffect(() => {
     if (user) {
-      setMylist(user.badge_list);
+      const pokeId = user.my_poketmon.map(obj => obj.poke_id);
+      setMylist(pokeId);
+      setBadgeList(user.badge_list);
     }
   }, [user]);
   return (
@@ -77,8 +99,8 @@ function Profile() {
                 </div>
               </div>
               <div className={style.profile_badge_wrap}>
-                {user.badge_list &&
-                  user.badge_list.map((badge, key) => {
+                {badgeList &&
+                  badgeList.map((badge, key) => {
                     return badge === null ? (
                       <div
                         key={key}
@@ -118,27 +140,29 @@ function Profile() {
                       : style.profile_badge_modal
                   }
                 >
-                  {mylist.map((list, key) => {
-                    return (
-                      <div
-                        key={key}
-                        className={style.modal_img_wrap}
-                        onClick={() => selectBadge(list)}
-                      >
-                        <img
-                          src="/img/poke-face.png"
-                          alt="modal image"
-                          style={{
-                            transform: `translateX(calc(-${
-                              100 * ((list % 12 === 0 ? 12 : list % 12) - 1)
-                            }% / 12)) translateY(calc(-${
-                              100 * (Math.ceil(list / 12) - 1)
-                            }% / 13))`,
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
+                  {mylist.length > 0
+                    ? mylist.map((list, key) => {
+                        return (
+                          <div
+                            key={key}
+                            className={style.modal_img_wrap}
+                            onClick={() => selectBadge(list)}
+                          >
+                            <img
+                              src="/img/poke-face.png"
+                              alt="modal image"
+                              style={{
+                                transform: `translateX(calc(-${
+                                  100 * ((list % 12 === 0 ? 12 : list % 12) - 1)
+                                }% / 12)) translateY(calc(-${
+                                  100 * (Math.ceil(list / 12) - 1)
+                                }% / 13))`,
+                              }}
+                            />
+                          </div>
+                        );
+                      })
+                    : null}
                 </div>
               </div>
             </div>

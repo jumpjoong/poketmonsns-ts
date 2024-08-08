@@ -20,11 +20,10 @@ export interface User {
   follower: FollowerType[];
   following: FollowingType[];
 }
-interface MyPoketmon {
+export interface MyPoketmon {
   id: number;
   poke_id: number;
   user_id: number;
-  author: Author;
 }
 
 export interface Author {
