@@ -11,18 +11,18 @@ import {
 import { setSearchQuery } from "@/app/_store/searchUserName";
 
 function Profile() {
-  const { data: session, status } = useSession();
   const user = useAppSelector(state => state.user.user);
   const [badgeModModal, setBadgeModModal] = useState(false);
   const [selectBadgeIndex, setSelectBadgeIndex] = useState<number>(-1);
   const [mylist, setMylist] = useState<number[]>([]);
   const [badgeList, setBadgeList] = useState<number[]>([]);
   const dispatch = useAppDispatch();
+
   const BadgeFunc = (key: number) => {
     setSelectBadgeIndex(key);
     setBadgeModModal(!badgeModModal);
   };
-  console.log(badgeList);
+
   const selectBadge = async (key: number) => {
     if (user) {
       const updateBadge: number[] = [...badgeList];
@@ -59,7 +59,7 @@ function Profile() {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user && user.my_poketmon) {
       const pokeId = user.my_poketmon.map(obj => obj.poke_id);
       setMylist(pokeId);
       setBadgeList(user.badge_list);

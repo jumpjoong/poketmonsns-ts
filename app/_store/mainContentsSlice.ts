@@ -11,6 +11,7 @@ const mainContentsSlice = createSlice({
     selectsWrite: () => "Write",
     selectsEditProfile: () => "EditProfile",
     selectsFollowing: () => "Following",
+    selectsNoob: () => "Noob",
   },
 });
 
@@ -23,4 +24,5 @@ export const {
   selectsWrite,
   selectsEditProfile,
   selectsFollowing,
+  selectsNoob,
 } = mainContentsSlice.actions;

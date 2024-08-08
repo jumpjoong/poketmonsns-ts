@@ -15,6 +15,7 @@ export interface User {
   rep: number;
   rep_motion_url: string;
   badge_list: [];
+  noob: boolean;
   my_poketmon: MyPoketmon[];
   my_posts: MyPosts[];
   follower: FollowerType[];

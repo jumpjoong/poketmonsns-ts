@@ -16,8 +16,8 @@ const EditProfile = () => {
   const [changeName, setChangeName] = useState(user?.name);
   const [confirmNickName, setConfirmNickName] = useState(user?.name);
   const regex = /[\s!@#\$%\^\&*\)\(+=._-]+/g;
-
   const dispatch = useAppDispatch();
+
   //프로필 이미지 클릭
   const profileImgMod = () => {
     setProfileImgToggle(!profileImgToggle);
@@ -63,16 +63,24 @@ const EditProfile = () => {
   const changeUserProfileHandler = async () => {
     try {
       if (user?.id && session?.user.accessToken) {
-        const response = await fetch(`/api/changenickname`, {
-          method: "POST",
-          body: JSON.stringify({
-            user_id: user?.id,
-            nickname: changeName,
-          }),
-        });
-        const res = await response.json();
+        //닉네임 변경 되었을 때 로직
+        if (changeName !== user.name) {
+          const response = await fetch(`/api/changenickname`, {
+            method: "POST",
+            body: JSON.stringify({
+              user_id: user?.id,
+              nickname: changeName,
+            }),
+          });
+          const res = await response.json();
 
-        if (res.ok) {
+          if (!res.ok) {
+            alert(res.error);
+            return;
+          }
+        }
+        //포켓볼 이미지 변경 되었을 때
+        if (user.pro_img !== initialProfileImg) {
           await fetch(`/api/changeprofileimg`, {
             method: "POST",
             body: JSON.stringify({
@@ -80,16 +88,14 @@ const EditProfile = () => {
               pro_img: initialProfileImg,
             }),
           });
-          dispatch(
-            fetchUser({
-              userId: user.id,
-              accessToken: session.user.accessToken,
-            })
-          );
-          dispatch(selectsBoard());
-        } else {
-          alert(res.error);
         }
+        dispatch(
+          fetchUser({
+            userId: user.id,
+            accessToken: session.user.accessToken,
+          })
+        );
+        dispatch(selectsBoard());
       } else {
         alert("다시 로그인 해주세요!");
         window.location.replace("/");

@@ -1,17 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import Trend from "./Trend/Trend";
 import Encyclopedia from "./Encyclopedia/Encyclopedia";
 import MyPosts from "./MyPosts/MyPosts";
 import Write from "./Write/Write";
 import Board from "./Board/Board";
-import { selectsWrite } from "@/app/_store/mainContentsSlice";
+import { selectsNoob, selectsWrite } from "@/app/_store/mainContentsSlice";
 import EditProfile from "./EditProfile/EditProfile";
 import Following from "./Following/Following";
+import Tutorial from "./Tutorial/Tutorial";
 
 function MainContents() {
+  const user = useAppSelector(state => state.user.user);
+  const userStatus = useAppSelector(state => state.user.status);
   const navSelectors = useAppSelector(state => state.mainContents);
   const dispatch = useAppDispatch();
   const [editPost, setEditPost] = useState<{
@@ -26,6 +29,13 @@ function MainContents() {
       setEditMode(true);
     }
   };
+
+  useEffect(() => {
+    //user정보가 업데이트 될 때 무조건 idle > loading > 실패, 성공
+    if (user?.noob && userStatus === "succeeded") {
+      dispatch(selectsNoob());
+    }
+  }, [user, navSelectors]);
 
   switch (navSelectors) {
     case "Board": {
@@ -56,6 +66,9 @@ function MainContents() {
     }
     case "Following": {
       return <Following />;
+    }
+    case "Noob": {
+      return <Tutorial />;
     }
     default:
       return <Board onEdit={handleEdit} />;

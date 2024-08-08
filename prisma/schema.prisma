@@ -17,6 +17,7 @@ model user {
   rep         Int         @default(0)
   rep_motion_url String @default("")
   badge_list  Json?   
+  noob Boolean @default(true)
   my_poketmon have_poke[]
   my_posts    posts[]
   like_post like_post[]
