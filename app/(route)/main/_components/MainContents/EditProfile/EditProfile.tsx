@@ -3,7 +3,7 @@ import React, { FormEvent, useEffect, useState } from "react";
 import style from "@/_styles/editprofile.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import { fetchUser } from "@/app/_store/userSlice";
-import { selectsBoard } from "@/app/_store/mainContentsSlice";
+import { setContent } from "@/app/_store/mainContentsSlice";
 
 const EditProfile = () => {
   const { data: session, status } = useSession();
@@ -95,7 +95,7 @@ const EditProfile = () => {
             accessToken: session.user.accessToken,
           })
         );
-        dispatch(selectsBoard());
+        dispatch(setContent("Board"));
       } else {
         alert("다시 로그인 해주세요!");
         window.location.replace("/");

@@ -8,13 +8,7 @@ import {
   Create,
 } from "@mui/icons-material";
 import { useAppDispatch } from "@/app/_hooks/hooks";
-import {
-  selectsEncyclopedia,
-  selectsMyPosts,
-  selectsBoard,
-  selectsTrend,
-  selectsWrite,
-} from "@/app/_store/mainContentsSlice";
+import { setContent } from "@/app/_store/mainContentsSlice";
 
 function Nav() {
   const dispatch = useAppDispatch();
@@ -23,7 +17,7 @@ function Nav() {
       <div className={style.nav_btn_wrap}>
         <div
           className={style.nav_home_btn}
-          onClick={() => dispatch(selectsBoard())}
+          onClick={() => dispatch(setContent("Board"))}
         >
           <Home
             sx={{ color: "rgba(224, 102, 102)", background: "transparent" }}
@@ -32,7 +26,7 @@ function Nav() {
         </div>
         <div
           className={style.nav_trend_btn}
-          onClick={() => dispatch(selectsTrend())}
+          onClick={() => dispatch(setContent("Trend"))}
         >
           <Whatshot
             sx={{ color: "rgba(224, 102, 102)", background: "transparent" }}
@@ -41,7 +35,7 @@ function Nav() {
         </div>
         <div
           className={style.nav_mymsg_btn}
-          onClick={() => dispatch(selectsEncyclopedia())}
+          onClick={() => dispatch(setContent("Encyclopedia"))}
         >
           <MenuBook
             sx={{ color: "rgba(224, 102, 102)", background: "transparent" }}
@@ -50,7 +44,7 @@ function Nav() {
         </div>
         <div
           className={style.nav_more_btn}
-          onClick={() => dispatch(selectsMyPosts())}
+          onClick={() => dispatch(setContent("MyPost"))}
         >
           <Description
             sx={{ color: "rgba(224, 102, 102)", background: "transparent" }}
@@ -59,7 +53,7 @@ function Nav() {
         </div>
         <div
           className={style.nav_write_btn}
-          onClick={() => dispatch(selectsWrite())}
+          onClick={() => dispatch(setContent("Write"))}
         >
           <Create
             sx={{ color: "rgba(224, 102, 102)", background: "transparent" }}
