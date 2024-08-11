@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/app/_hooks/hooks";
-import { selectsBoard } from "@/app/_store/mainContentsSlice";
+import { setContent } from "@/app/_store/mainContentsSlice";
 import { useSession } from "next-auth/react";
 import style from "@/_styles/tutorial.module.scss";
 import React, { ChangeEvent, FormEvent, useState } from "react";
@@ -35,7 +35,7 @@ function Tutorial() {
           accessToken: session.user.accessToken,
         })
       );
-      dispatch(selectsBoard());
+      dispatch(setContent("Board"));
     }
   };
 

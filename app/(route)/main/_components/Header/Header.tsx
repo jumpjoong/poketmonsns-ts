@@ -2,16 +2,13 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { ManageAccounts } from "@mui/icons-material";
-import style from "@/app/_styles/head.module.scss";
+import style from "@/app/_styles/header.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
-import {
-  Author,
-  FollowerDetailType,
-  FollowingType,
-} from "@/app/_types/userType";
+import { FollowerDetailType } from "@/app/_types/userType";
 import { useDebounce } from "@/_hooks/debounce";
-import { selectsFollowing } from "@/app/_store/mainContentsSlice";
+import { goBack, setContent } from "@/app/_store/mainContentsSlice";
 import { setSearchQuery } from "@/app/_store/searchUserName";
+import { signOut } from "next-auth/react";
 interface newType {
   id: number;
   email: string;
@@ -30,11 +27,11 @@ function Header() {
   const [title, setTitle] = useState();
   const user = useAppSelector(state => state.user.user);
   const follow = useAppSelector(state => state.localFollowReducer.following);
-  //디바운스 필요한 경우 딜레이 시간 바꾸기
-  const mobileProfileOptions = ["프로필 수정", "팔로우", "로그아웃"];
-  const MOBILE_ITEM_HEIGHT = 3;
+  const locationHistory = useAppSelector(state => state.mainContents.history);
+  const profileOptions = ["프로필 수정", "팔로우", "로그아웃"];
+  const ITEM_HEIGHT = 3;
   const [search, setSearch] = useState("");
-  const debounceSearchText = useDebounce(search, 300);
+  const debounceSearchText = useDebounce(search, 300); //디바운스 필요한 경우 딜레이 시간 바꾸기
   const [localFilterFollowing, setLocalFilterFollowing] = useState<newType[]>(
     []
   );
@@ -43,14 +40,45 @@ function Header() {
   const [inputFocused, setInputFocused] = useState(false);
   const filterFollowingRef = useRef<HTMLDivElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const open = Boolean(anchorEl);
   const dispatch = useAppDispatch();
-
+  //검색 인풋창
   const searchSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
 
   const backBtn = () => {
-    // setPageStatus("LIST");
+    dispatch(goBack());
+  };
+
+  const mobileProfileOpenHandler = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    setAnchorEl(e.currentTarget);
+  };
+  const mobileProfileCloseHandler = (
+    e: React.MouseEvent<HTMLLIElement, MouseEvent>
+  ) => {
+    setAnchorEl(null);
+    switch (e.currentTarget.textContent) {
+      case "프로필 수정":
+        dispatch(setContent("EditProfile"));
+        break;
+      case "팔로우":
+        dispatch(setContent("Following"));
+        break;
+      case "로그아웃":
+        signOut();
+        break;
+    }
+  };
+
+  const moreSearchList = () => {
+    dispatch(setSearchQuery(search));
+    dispatch(setContent("Following"));
+    setLocalFilterFollowing([]);
+    setShowSearchDiv(false);
   };
   //디바운스
   useEffect(() => {
@@ -176,12 +204,6 @@ function Header() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [filterFollowingRef]);
-  const moreSearchList = () => {
-    dispatch(setSearchQuery(search));
-    dispatch(selectsFollowing());
-    setLocalFilterFollowing([]);
-    setShowSearchDiv(false);
-  };
 
   return (
     <header className={style.header}>
@@ -213,14 +235,14 @@ function Header() {
         )}
         <div className={style.status_title}>{title}</div>
       </div>
-      {/* <div className={style.Mobile_profile}>
+      <div className={style.Mobile_profile}>
         <IconButton
           aria-label="more"
           className={style.long_button}
           aria-controls={open ? "long_menu" : undefined}
           aria-expanded={open ? "true" : undefined}
           aria-haspopup="true"
-          onClick={handleClick}
+          onClick={e => mobileProfileOpenHandler(e)}
         >
           <ManageAccounts className={style.icon_dot} />
         </IconButton>
@@ -231,10 +253,9 @@ function Header() {
           }}
           anchorEl={anchorEl}
           open={open}
-          onClose={handleClose}
+          onClose={mobileProfileCloseHandler}
           PaperProps={{
             style: {
-              // maxHeight: ITEM_HEIGHT * 4.5,
               minHeight: ITEM_HEIGHT * 4.5,
               minWidth: "120px",
               width: "10ch",
@@ -243,20 +264,19 @@ function Header() {
               fontFamily: "NanumSquareRound",
             },
           }}
-          onClick={e => menuClick(e)}
         >
           {profileOptions.map(option => (
             <MenuItem
               className={style.menuitem}
               key={option}
               selected={option === "Pyxis"}
-              onClick={handleClose}
+              onClick={e => mobileProfileCloseHandler(e)}
             >
               {option}
             </MenuItem>
           ))}
         </Menu>
-      </div> */}
+      </div>
       <div className={style.search}>
         <span
           className={`${

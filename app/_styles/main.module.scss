@@ -323,51 +323,11 @@ $header-height: 150px;
 }
 
 @media screen and (max-width: 1400px) {
-  .header {
-    width: 1000px;
-    .status {
-      border-right: 1px solid rgba(224, 102, 102, 0.4);
-    }
-    .search {
-      display: none;
-    }
-  }
-
   .layout_main {
     width: 1000px;
-    .profile_container {
-      height: 0;
-      display: none;
-    }
-    .main_content_inner {
-      border-right: 1px solid rgba(224, 102, 102, 0.4);
-    }
   }
 }
 @media screen and (max-width: 1000px) {
-  .header {
-    width: 768px;
-    .logo_btn {
-      width: 68px;
-      .logo_btn_wrap {
-        display: none;
-        width: 10vw;
-        height: 10vw;
-        margin-left: 3vw;
-      }
-    }
-    .status {
-      max-width: 700px;
-      .margin_dummy {
-        width: 100px;
-      }
-      .status_arrow_container {
-        width: 100px;
-        height: 150px;
-      }
-    }
-  }
-
   .layout_main {
     width: 768px;
     margin: 0 auto;
@@ -407,33 +367,6 @@ $header-height: 150px;
   }
 }
 @media screen and (max-width: 768px) {
-  .header {
-    max-width: 700px;
-    width: 100vw;
-    flex-grow: 1;
-    height: 100px;
-    .logo_btn {
-      height: 0;
-      display: none;
-    }
-    .status {
-      max-width: 700px;
-      width: 100vw;
-      border-left: 1px solid rgba(224, 102, 102, 0.4);
-      font-size: 4vw;
-      .margin_dummy {
-        display: none;
-      }
-      .status_arrow_container {
-        display: none;
-      }
-      .status_title {
-        font-size: 6vw;
-        margin-left: 6vw;
-      }
-    }
-  }
-
   .layout_main {
     max-width: 700px;
     width: 100vw;

@@ -76,6 +76,9 @@ $header-height: 150px;
       border: none;
     }
   }
+  .Mobile_profile {
+    display: none;
+  }
   .search {
     width: 400px;
 
@@ -142,9 +145,6 @@ $header-height: 150px;
     .status {
       border-right: 1px solid rgba(224, 102, 102, 0.4);
     }
-    .search {
-      display: none;
-    }
     .Mobile_profile {
       width: 1000px;
       height: 100%;
@@ -158,7 +158,6 @@ $header-height: 150px;
         top: 75px;
         transform: translateY(-50%);
         right: 3rem;
-
         .icon_dot {
           color: rgba(224, 102, 102);
         }
@@ -166,6 +165,9 @@ $header-height: 150px;
       .long_menu {
         position: absolute;
       }
+    }
+    .search {
+      display: none;
     }
   }
 }

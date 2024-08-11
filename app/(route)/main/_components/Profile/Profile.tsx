@@ -2,12 +2,9 @@
 import React, { useEffect, useState } from "react";
 import style from "@/app/_styles/profile.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
-import {
-  selectsEditProfile,
-  selectsFollowing,
-} from "@/app/_store/mainContentsSlice";
+import { setContent } from "@/app/_store/mainContentsSlice";
 import { setSearchQuery } from "@/app/_store/searchUserName";
 
 function Profile() {
@@ -50,12 +47,12 @@ function Profile() {
   };
 
   const editProfileHandler = () => {
-    dispatch(selectsEditProfile());
+    dispatch(setContent("EditProfile"));
   };
 
   const followBtnHandler = () => {
     dispatch(setSearchQuery(""));
-    dispatch(selectsFollowing());
+    dispatch(setContent("Following"));
   };
 
   useEffect(() => {

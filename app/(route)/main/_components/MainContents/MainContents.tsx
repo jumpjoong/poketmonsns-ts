@@ -7,15 +7,16 @@ import Encyclopedia from "./Encyclopedia/Encyclopedia";
 import MyPosts from "./MyPosts/MyPosts";
 import Write from "./Write/Write";
 import Board from "./Board/Board";
-import { selectsNoob, selectsWrite } from "@/app/_store/mainContentsSlice";
+// import { selectsNoob, selectsWrite } from "@/app/_store/mainContentsSlice";
 import EditProfile from "./EditProfile/EditProfile";
 import Following from "./Following/Following";
 import Tutorial from "./Tutorial/Tutorial";
+import { setContent } from "@/app/_store/mainContentsSlice";
 
 function MainContents() {
   const user = useAppSelector(state => state.user.user);
   const userStatus = useAppSelector(state => state.user.status);
-  const navSelectors = useAppSelector(state => state.mainContents);
+  const navSelectors = useAppSelector(state => state.mainContents.current);
   const dispatch = useAppDispatch();
   const [editPost, setEditPost] = useState<{
     PostId: number;
@@ -23,7 +24,7 @@ function MainContents() {
   } | null>(null);
   const [editMode, setEditMode] = useState(false);
   const handleEdit = (PostId: number, content: string, mode: string) => {
-    dispatch(selectsWrite());
+    dispatch(setContent("Write"));
     setEditPost({ PostId, content });
     if (mode === "editMode") {
       setEditMode(true);
@@ -33,7 +34,7 @@ function MainContents() {
   useEffect(() => {
     //user정보가 업데이트 될 때 무조건 idle > loading > 실패, 성공
     if (user?.noob && userStatus === "succeeded") {
-      dispatch(selectsNoob());
+      dispatch(setContent("Noob"));
     }
   }, [user, navSelectors]);
 
