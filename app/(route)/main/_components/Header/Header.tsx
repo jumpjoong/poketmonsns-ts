@@ -234,49 +234,50 @@ function Header() {
           </div>
         )}
         <div className={style.status_title}>{title}</div>
+        <div className={style.Mobile_profile}>
+          <IconButton
+            aria-label="more"
+            className={style.long_button}
+            aria-controls={open ? "long_menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            onClick={e => mobileProfileOpenHandler(e)}
+          >
+            <ManageAccounts className={style.icon_dot} />
+          </IconButton>
+          <Menu
+            className={style.long_menu}
+            MenuListProps={{
+              "aria-labelledby": "long_button",
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={mobileProfileCloseHandler}
+            PaperProps={{
+              style: {
+                minHeight: ITEM_HEIGHT * 4.5,
+                minWidth: "120px",
+                width: "10ch",
+                backgroundColor: "#fffbef",
+                color: "#111",
+                fontFamily: "NanumSquareRound",
+              },
+            }}
+          >
+            {profileOptions.map(option => (
+              <MenuItem
+                className={style.menuitem}
+                key={option}
+                selected={option === "Pyxis"}
+                onClick={e => mobileProfileCloseHandler(e)}
+              >
+                {option}
+              </MenuItem>
+            ))}
+          </Menu>
+        </div>
       </div>
-      <div className={style.Mobile_profile}>
-        <IconButton
-          aria-label="more"
-          className={style.long_button}
-          aria-controls={open ? "long_menu" : undefined}
-          aria-expanded={open ? "true" : undefined}
-          aria-haspopup="true"
-          onClick={e => mobileProfileOpenHandler(e)}
-        >
-          <ManageAccounts className={style.icon_dot} />
-        </IconButton>
-        <Menu
-          className={style.long_menu}
-          MenuListProps={{
-            "aria-labelledby": "long_button",
-          }}
-          anchorEl={anchorEl}
-          open={open}
-          onClose={mobileProfileCloseHandler}
-          PaperProps={{
-            style: {
-              minHeight: ITEM_HEIGHT * 4.5,
-              minWidth: "120px",
-              width: "10ch",
-              backgroundColor: "#fffbef",
-              color: "#111",
-              fontFamily: "NanumSquareRound",
-            },
-          }}
-        >
-          {profileOptions.map(option => (
-            <MenuItem
-              className={style.menuitem}
-              key={option}
-              selected={option === "Pyxis"}
-              onClick={e => mobileProfileCloseHandler(e)}
-            >
-              {option}
-            </MenuItem>
-          ))}
-        </Menu>
-      </div>
+
       <div className={style.search}>
         <span
           className={`${
