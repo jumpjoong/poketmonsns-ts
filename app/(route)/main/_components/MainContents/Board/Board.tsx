@@ -31,7 +31,6 @@ function Board({ onEdit }: BoardProps) {
   useEffect(() => {
     //초깃값 설정하는 대체제를 이거보다 좋은 방법을 모르겠음...
     if (followingUser.status === "succeeded") {
-      // setFollowing(followingUser.userFollowing);
       dispatch(setInitialLocalFollowing(followingUser.userFollowing));
     }
   }, [followingUser]);

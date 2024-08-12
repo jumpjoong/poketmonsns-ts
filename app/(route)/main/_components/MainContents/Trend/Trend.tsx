@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import { fetchPosts } from "@/app/_store/postsSlice";
-import { Posts } from "@/app/_types/postsType";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Post from "../Board/_components/Posts";
 import { useUserFollowHandler } from "@/app/_hooks/useUserFollowHandler";
 
@@ -13,7 +12,6 @@ function Trend({ onEdit }: BoardProps) {
   const user = useAppSelector(state => state.user.user);
   const posts = useAppSelector(state => state.posts.posts);
   const followingUser = useAppSelector(state => state.following.userFollowing);
-  const [hotPosts, setHotPosts] = useState<Posts[]>([]);
   const dispatch = useAppDispatch();
   const [render, setRender] = useState(false);
   const userFollowHandler = useUserFollowHandler();
@@ -49,20 +47,6 @@ function Trend({ onEdit }: BoardProps) {
           />
         );
       });
-    // return hotPosts.map(posts => {
-    //   return (
-    //     <Post
-    //       posts={posts}
-    //       key={posts.id}
-    //       onEdit={onEdit}
-    //       isFollow={
-    //         followingUser.some(obj => obj.following_id === posts.user_id) ||
-    //         false
-    //       }
-    //       userFollowHandler={userFollowHandler}
-    //     />
-    //   );
-    // });
   }
 }
 
