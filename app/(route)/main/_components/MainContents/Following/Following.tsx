@@ -16,50 +16,49 @@ function Following() {
         // 검색어가 없으면 기존 팔로잉 목록 사용
         setDisplayUsers(userFollowing.map(obj => obj.following));
         return;
-      }
-      try {
-        const response = await fetch(
-          `/api/searchUsers?searchUserName=${searchQuery}&userId=${user!.id}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (response.ok) {
-          const res = await response.json();
-          const { matchingUsers } = res;
-
-          // 기존 팔로우 목록과 서버에서 가져온 목록 병합
-          const combinedUsers = [
-            ...userFollowing.map(f => f.following),
-            ...matchingUsers,
-          ];
-          const uniqueUsers: Author[] = Array.from(
-            combinedUsers
-              .reduce((map, user) => {
-                if (!map.has(user.id)) {
-                  map.set(user.id, user); // ID를 키로 사용자 객체를 저장
-                }
-                return map;
-              }, new Map())
-              .values()
+      } else {
+        try {
+          const response = await fetch(
+            `/api/searchUsers?searchUserName=${searchQuery}&userId=${user!.id}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
           );
-          setDisplayUsers(uniqueUsers);
-        } else {
-          console.error("검색 결과 없음");
+          if (response.ok) {
+            const res = await response.json();
+            const { matchingUser } = res;
+            // 기존 팔로우 목록과 서버에서 가져온 목록 병합
+            const combinedUsers = [
+              ...userFollowing.map(f => f.following),
+              ...matchingUser,
+            ];
+            const uniqueUsers: Author[] = Array.from(
+              combinedUsers
+                .reduce((map, user) => {
+                  if (!map.has(user.id)) {
+                    map.set(user.id, user); // ID를 키로 사용자 객체를 저장
+                  }
+                  return map;
+                }, new Map())
+                .values()
+            );
+            setDisplayUsers(uniqueUsers);
+          } else {
+            console.error("검색 결과 없음");
+          }
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
       }
     };
     fetchAndMergeResults();
     return () => {
       dispatch(fetchPosts(user!.id));
     };
-  }, [searchQuery, userFollowing, user]);
+  }, [searchQuery, user]);
 
   if (userFollowing.length === 0) {
     return <p>팔로우한 유저가 없습니다</p>;

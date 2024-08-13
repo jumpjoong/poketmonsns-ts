@@ -125,6 +125,15 @@ $header-height: 150px;
             }
           }
         }
+        .search_result {
+          display: flex;
+          align-items: center;
+          margin-bottom: 15px;
+          > img {
+            width: 30px;
+            height: 30px;
+          }
+        }
         .more_search {
           padding-right: 25px;
           text-align: center;

@@ -42,7 +42,8 @@ export const useUserFollowHandler = () => {
         })
       );
     } else {
-      //팔로우 로직
+      //팔로우 로직 following.followers 추가 이유 = 인풋창에 검색 시 팔로워가 적용이 안됨
+      //
       const followData = {
         id: postsId,
         follower_id: user!.id,
