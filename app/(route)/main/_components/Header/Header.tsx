@@ -307,7 +307,10 @@ function Header() {
                     </div>
                   );
                 })}
-                <p>{debounceSearchText}&nbsp;에 대한 검색 결과</p>
+                <div className={style.search_result}>
+                  <img src="/img/search_img.png" alt="검색 이미지" />
+                  <p>{debounceSearchText}&nbsp;에 대한 검색 결과</p>
+                </div>
                 {searchServerUser.map((obj, key) => {
                   return (
                     <div key={key} className={style.following_div}>
