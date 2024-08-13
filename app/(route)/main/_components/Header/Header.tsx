@@ -27,7 +27,6 @@ function Header() {
   const [title, setTitle] = useState();
   const user = useAppSelector(state => state.user.user);
   const follow = useAppSelector(state => state.localFollowReducer.following);
-  const locationHistory = useAppSelector(state => state.mainContents.history);
   const profileOptions = ["프로필 수정", "팔로우", "로그아웃"];
   const ITEM_HEIGHT = 3;
   const [search, setSearch] = useState("");
@@ -277,7 +276,6 @@ function Header() {
           </Menu>
         </div>
       </div>
-
       <div className={style.search}>
         <span
           className={`${
