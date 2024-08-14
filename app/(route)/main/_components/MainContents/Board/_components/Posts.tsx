@@ -18,6 +18,8 @@ interface AddIsFollow extends PostsProps {
   ) => void;
   id?: string;
   onEdit?: (id: number, content: string, editMode: string) => void;
+  infoMode: boolean;
+  toggleInfoMode: () => void;
 }
 
 const Posts = ({
@@ -26,18 +28,19 @@ const Posts = ({
   userFollowHandler,
   id,
   onEdit,
+  infoMode,
+  toggleInfoMode,
 }: AddIsFollow) => {
   const { data: session, status } = useSession();
   const user = useAppSelector(state => state.user.user);
-  const [infoMode, setInfoMode] = useState(false);
   const [likeCount, setLikeCount] = useState(posts.like_count);
   const [isLike, setIsLike] = useState(
     posts.like_post.some(obj => obj.user_id === user?.id)
   );
-
   const date = moment(posts.date).utc().tz("Asia/Seoul").fromNow();
   const dispatch = useAppDispatch();
-  const handleLike = async () => {
+
+  const likeHandler = async () => {
     // 좋아요 컨트롤
     const response = await fetch(`/api/likecount`, {
       method: "POST",
@@ -105,13 +108,10 @@ const Posts = ({
             <p>{likeCount}</p>
             <button
               className={isLike ? style.fillheart : style.heart}
-              onClick={handleLike}
+              onClick={likeHandler}
             ></button>
           </section>
-          <div
-            className={style.info_mod_wrap}
-            onClick={() => setInfoMode(!infoMode)}
-          >
+          <div className={style.info_mod_wrap} onClick={toggleInfoMode}>
             <svg
               width="4"
               height="20.5"
@@ -175,7 +175,7 @@ const Posts = ({
           <p>{likeCount}</p>
           <button
             className={isLike ? style.fillheart : style.heart}
-            onClick={handleLike}
+            onClick={likeHandler}
           ></button>
         </section>
       </li>

@@ -43,7 +43,6 @@ export const useUserFollowHandler = () => {
       );
     } else {
       //팔로우 로직 following.followers 추가 이유 = 인풋창에 검색 시 팔로워가 적용이 안됨
-      //
       const followData = {
         id: postsId,
         follower_id: user!.id,
@@ -60,6 +59,7 @@ export const useUserFollowHandler = () => {
           ],
         },
       };
+      console.log(postsUserData);
       const updatedLocalFollowing = [...localFollow, followData];
       dispatch(updateLocalFollow(updatedLocalFollowing));
       //팔로우 리스트 컴포넌트에서 사용 중이여서 store값도 업데이트 해줘야함

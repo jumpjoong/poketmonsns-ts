@@ -23,6 +23,7 @@ function MainContents() {
     content: string;
   } | null>(null);
   const [editMode, setEditMode] = useState(false);
+
   const handleEdit = (PostId: number, content: string, mode: string) => {
     dispatch(setContent("Write"));
     setEditPost({ PostId, content });
@@ -39,19 +40,19 @@ function MainContents() {
   }, [user, navSelectors]);
 
   switch (navSelectors) {
-    case "Board": {
+    case "소식": {
       return <Board onEdit={handleEdit} />;
     }
-    case "Trend": {
+    case "인기글": {
       return <Trend onEdit={handleEdit} />;
     }
-    case "Encyclopedia": {
+    case "도감": {
       return <Encyclopedia />;
     }
-    case "MyPost": {
+    case "작성한 글": {
       return <MyPosts />;
     }
-    case "Write": {
+    case "글쓰기": {
       return editMode ? (
         <Write
           PostId={editPost?.PostId}
@@ -62,10 +63,10 @@ function MainContents() {
         <Write />
       );
     }
-    case "EditProfile": {
+    case "프로필 수정": {
       return <EditProfile />;
     }
-    case "Following": {
+    case "팔로잉": {
       return <Following />;
     }
     case "Noob": {

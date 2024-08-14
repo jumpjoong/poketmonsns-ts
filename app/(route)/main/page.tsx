@@ -7,7 +7,7 @@ import style from "../../_styles/mainContentsWrap.module.scss";
 function Main() {
   return (
     <div className={style.main_contents_wrap}>
-      <MainContents />;
+      <MainContents />
     </div>
   );
 }

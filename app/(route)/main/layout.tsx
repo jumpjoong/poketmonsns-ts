@@ -18,7 +18,6 @@ function layout({ children }: Props) {
       location.replace("/");
     } else if (status === "authenticated" && session.user.accessToken) {
       // 인증되었고 access 토큰이 있을경우 실행
-      //여기 로직 추가로 진행해야함
       dispatch(
         fetchUser({
           userId: session.user.id,

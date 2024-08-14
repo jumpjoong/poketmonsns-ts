@@ -43,7 +43,6 @@ function FollowList({ following }: favoriteUserType) {
       </div>
       <div
         className={`${style.follow_button} ${followList ? style.fill : ""}`}
-        // onClick={() => favoriteUser(following.id)}
         onClick={() => followHandler(following)}
       >
         {followList ? <p>팔로우</p> : <p>언팔로우</p>}
