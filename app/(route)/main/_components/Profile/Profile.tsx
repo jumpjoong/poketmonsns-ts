@@ -25,7 +25,7 @@ function Profile() {
       const updateBadge: number[] = [...badgeList];
 
       updateBadge[selectBadgeIndex] = key;
-      console.log(updateBadge);
+
       const response = await fetch(`/api/changeprofilebadge`, {
         method: "PUT",
         headers: {
@@ -44,15 +44,16 @@ function Profile() {
         console.log("에러");
       }
     }
+    setBadgeModModal(!badgeModModal);
   };
 
   const editProfileHandler = () => {
-    dispatch(setContent("EditProfile"));
+    dispatch(setContent("프로필 수정"));
   };
 
   const followBtnHandler = () => {
     dispatch(setSearchQuery(""));
-    dispatch(setContent("Following"));
+    dispatch(setContent("팔로잉"));
   };
 
   useEffect(() => {

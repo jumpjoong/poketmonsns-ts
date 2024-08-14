@@ -13,7 +13,11 @@ export async function GET(req: Request) {
         like_post: true,
         author: {
           //추가 이유: 팔로우 클릭하고 검색창 클릭 시 follow의 값이 store에 저장이 안되서 추가함
-          include: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            pro_img: true,
             followers: true,
             following: {
               include: {

@@ -23,11 +23,11 @@ function Encyclopedia() {
   const poketBuyModal = useAppSelector(state => state.ModalControl);
   //상세정보 누르면 나오는 모달창 컨트롤
   const moreDetailControl = useAppSelector(state => state.moreDetail);
-  const dispatch = useAppDispatch();
   //구매하기 모달창 부모 ref
   const parentRef = useRef<HTMLDivElement>(null);
   //스탯 모달창 ref
   const statsRef = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
 
   //구매하기, 상세보기 눌렀을 때 뜨는 모달창 컨트롤
   const modalClick = (e: React.MouseEvent<HTMLElement>) => {

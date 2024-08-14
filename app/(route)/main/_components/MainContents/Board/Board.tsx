@@ -3,9 +3,9 @@ import { fetchPosts } from "@/app/_store/postsSlice";
 import React, { useEffect, useState } from "react";
 import style from "@/_styles/board.module.scss";
 import Posts from "./_components/Posts";
-import Image from "next/image";
 import { setInitialLocalFollowing } from "@/app/_store/followSlice";
 import { useUserFollowHandler } from "@/app/_hooks/useUserFollowHandler";
+import Loading from "../../Loading/Loading";
 
 type BoardProps = {
   onEdit: (id: number, content: string, editMode: string) => void;
@@ -20,8 +20,14 @@ function Board({ onEdit }: BoardProps) {
   );
   const userStatus = useAppSelector(state => state.user.status);
   const [followControl, setFollowControl] = useState(true); //전체글, 팔로우 글
+  const [infoMode, setInfoMode] = useState<Number | null>(null); //점자 컨트롤
+
   const dispatch = useAppDispatch();
   const userFollowHandler = useUserFollowHandler();
+
+  const toggleInfoMode = (postId: number) => {
+    setInfoMode(prevId => (prevId === postId ? null : postId));
+  };
 
   useEffect(() => {
     if (user) {
@@ -40,17 +46,7 @@ function Board({ onEdit }: BoardProps) {
     userStatus === null ||
     userStatus === "loading"
   ) {
-    return (
-      <div className={style.load}>
-        <Image
-          width={352}
-          height={300}
-          priority
-          src="/img/loadimg/pika_heart.webp"
-          alt="로딩 이미지"
-        />
-      </div>
-    );
+    return <Loading />;
   } else {
     return (
       <div className={style.postsBox}>
@@ -80,12 +76,13 @@ function Board({ onEdit }: BoardProps) {
                 posts={posts}
                 key={posts.id}
                 id={`post-${posts.id}`}
-                isFollow={
-                  localFollow.some(obj => obj.following_id === posts.user_id) ||
-                  false
-                }
+                isFollow={localFollow.some(
+                  obj => obj.following_id === posts.user_id
+                )}
                 userFollowHandler={userFollowHandler}
                 onEdit={onEdit}
+                infoMode={infoMode === posts.id}
+                toggleInfoMode={() => toggleInfoMode(posts.id)}
               />
             ))
           ) : localFollow.length === 0 ? (
@@ -101,6 +98,8 @@ function Board({ onEdit }: BoardProps) {
                   key={posts.id}
                   isFollow={true}
                   userFollowHandler={userFollowHandler}
+                  infoMode={infoMode === posts.id}
+                  toggleInfoMode={() => toggleInfoMode(posts.id)}
                 />
               ))
           )}

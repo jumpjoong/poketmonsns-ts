@@ -9,6 +9,7 @@ import { useDebounce } from "@/_hooks/debounce";
 import { goBack, setContent } from "@/app/_store/mainContentsSlice";
 import { setSearchQuery } from "@/app/_store/searchUserName";
 import { signOut } from "next-auth/react";
+import Headmeta from "../HeadMeta";
 interface newType {
   id: number;
   email: string;
@@ -24,9 +25,9 @@ interface newType {
   followers?: FollowerDetailType[];
 }
 function Header() {
-  const [title, setTitle] = useState();
   const user = useAppSelector(state => state.user.user);
   const follow = useAppSelector(state => state.localFollowReducer.following);
+  const content = useAppSelector(state => state.mainContents.current);
   const profileOptions = ["프로필 수정", "팔로우", "로그아웃"];
   const ITEM_HEIGHT = 3;
   const [search, setSearch] = useState("");
@@ -62,10 +63,10 @@ function Header() {
     setAnchorEl(null);
     switch (e.currentTarget.textContent) {
       case "프로필 수정":
-        dispatch(setContent("EditProfile"));
+        dispatch(setContent("프로필 수정"));
         break;
       case "팔로우":
-        dispatch(setContent("Following"));
+        dispatch(setContent("팔로잉"));
         break;
       case "로그아웃":
         signOut();
@@ -182,6 +183,7 @@ function Header() {
     searchUser();
   }, [debounceSearchText, follow, inputFocused]);
 
+  //인풋창 제외한 곳을 클릭할 시 검색창 닫기
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -205,150 +207,153 @@ function Header() {
   }, [filterFollowingRef]);
 
   return (
-    <header className={style.header}>
-      <div className={style.logo_btn}>
-        <div className={style.logo_btn_wrap}>
-          <img src="/img/loadimg/pika_dance.webp"></img>
-        </div>
-      </div>
-      <div className={style.status}>
-        {title === "튜토리얼" || title === "소식" ? (
-          <div className={style.margin_dummy}></div>
-        ) : (
-          <div className={style.status_arrow_container}>
-            <div className={style.status_arrow_btn} onClick={backBtn}>
-              <svg
-                width="50"
-                height="33"
-                viewBox="0 0 50 33"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M16.3862 0L0 16.3862L16.3862 32.7725L20.4462 28.7125L10.9912 19.2575H50V13.515H10.9912L20.4462 4.05995L16.3862 0Z"
-                  fill="#E06666"
-                />
-              </svg>
-            </div>
+    <>
+      <Headmeta title={content} />
+      <header className={style.header}>
+        <div className={style.logo_btn}>
+          <div className={style.logo_btn_wrap}>
+            <img src="/img/loadimg/pika_dance.webp"></img>
           </div>
-        )}
-        <div className={style.status_title}>{title}</div>
-        <div className={style.Mobile_profile}>
-          <IconButton
-            aria-label="more"
-            className={style.long_button}
-            aria-controls={open ? "long_menu" : undefined}
-            aria-expanded={open ? "true" : undefined}
-            aria-haspopup="true"
-            onClick={e => mobileProfileOpenHandler(e)}
-          >
-            <ManageAccounts className={style.icon_dot} />
-          </IconButton>
-          <Menu
-            className={style.long_menu}
-            MenuListProps={{
-              "aria-labelledby": "long_button",
-            }}
-            anchorEl={anchorEl}
-            open={open}
-            onClose={mobileProfileCloseHandler}
-            PaperProps={{
-              style: {
-                minHeight: ITEM_HEIGHT * 4.5,
-                minWidth: "120px",
-                width: "10ch",
-                backgroundColor: "#fffbef",
-                color: "#111",
-                fontFamily: "NanumSquareRound",
-              },
-            }}
-          >
-            {profileOptions.map(option => (
-              <MenuItem
-                className={style.menuitem}
-                key={option}
-                selected={option === "Pyxis"}
-                onClick={e => mobileProfileCloseHandler(e)}
-              >
-                {option}
-              </MenuItem>
-            ))}
-          </Menu>
         </div>
-      </div>
-      <div className={style.search}>
-        <span
-          className={`${
-            localFilterFollowing.length === 0 ? `` : `${style.on}`
-          }`}
-        >
-          <input
-            value={search}
-            onChange={searchSubmit}
-            type="text"
-            name="search"
-            placeholder="User-name"
-            className={`${style.follow_search_bar} ${
+        <div className={style.status}>
+          {content === "Noob" || content === "소식" ? (
+            <div className={style.margin_dummy}></div>
+          ) : (
+            <div className={style.status_arrow_container}>
+              <div className={style.status_arrow_btn} onClick={backBtn}>
+                <svg
+                  width="50"
+                  height="33"
+                  viewBox="0 0 50 33"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M16.3862 0L0 16.3862L16.3862 32.7725L20.4462 28.7125L10.9912 19.2575H50V13.515H10.9912L20.4462 4.05995L16.3862 0Z"
+                    fill="#E06666"
+                  />
+                </svg>
+              </div>
+            </div>
+          )}
+          <div className={style.status_title}>{content}</div>
+          <div className={style.Mobile_profile}>
+            <IconButton
+              aria-label="more"
+              className={style.long_button}
+              aria-controls={open ? "long_menu" : undefined}
+              aria-expanded={open ? "true" : undefined}
+              aria-haspopup="true"
+              onClick={e => mobileProfileOpenHandler(e)}
+            >
+              <ManageAccounts className={style.icon_dot} />
+            </IconButton>
+            <Menu
+              className={style.long_menu}
+              MenuListProps={{
+                "aria-labelledby": "long_button",
+              }}
+              anchorEl={anchorEl}
+              open={open}
+              onClose={mobileProfileCloseHandler}
+              PaperProps={{
+                style: {
+                  minHeight: ITEM_HEIGHT * 4.5,
+                  minWidth: "120px",
+                  width: "10ch",
+                  backgroundColor: "#fffbef",
+                  color: "#111",
+                  fontFamily: "NanumSquareRound",
+                },
+              }}
+            >
+              {profileOptions.map(option => (
+                <MenuItem
+                  className={style.menuitem}
+                  key={option}
+                  selected={option === "Pyxis"}
+                  onClick={e => mobileProfileCloseHandler(e)}
+                >
+                  {option}
+                </MenuItem>
+              ))}
+            </Menu>
+          </div>
+        </div>
+        <div className={style.search}>
+          <span
+            className={`${
               localFilterFollowing.length === 0 ? `` : `${style.on}`
             }`}
-            autoComplete="off"
-            ref={searchInputRef}
-            onFocus={() => setInputFocused(true)} // 포커스 시 작동
-            onBlur={() => setInputFocused(false)} // 포커스 해제 시
-          ></input>
-          {showSearchDiv &&
-            (localFilterFollowing.length > 0 ? (
-              <div className={style.searchDiv} ref={filterFollowingRef}>
-                {localFilterFollowing.map((obj, key) => {
-                  return (
-                    <div key={key} className={style.following_div}>
-                      <p>{obj.following.name}</p>
-                      <p>팔로워: &nbsp;{obj.following.followers.length}명</p>
-                    </div>
-                  );
-                })}
-                <div className={style.search_result}>
-                  <img src="/img/search_img.png" alt="검색 이미지" />
-                  <p>{debounceSearchText}&nbsp;에 대한 검색 결과</p>
-                </div>
-                {searchServerUser.map((obj, key) => {
-                  return (
-                    <div key={key} className={style.following_div}>
-                      <p>{obj.name}</p>
-                      <p>팔로워: &nbsp;{obj.followers?.length}명</p>
-                    </div>
-                  );
-                })}
-                <p className={style.more_search} onClick={moreSearchList}>
-                  더보기
-                </p>
-              </div>
-            ) : (
-              <div className={style.searchDiv} ref={filterFollowingRef}>
-                <p>팔로우 목록이 없습니다</p>
-                <p>{debounceSearchText}&nbsp;에 대한 검색 결과</p>
-                {searchServerUser.length > 0 ? (
-                  searchServerUser.map((obj, key) => {
+          >
+            <input
+              value={search}
+              onChange={searchSubmit}
+              type="text"
+              name="search"
+              placeholder="User-name"
+              className={`${style.follow_search_bar} ${
+                localFilterFollowing.length === 0 ? `` : `${style.on}`
+              }`}
+              autoComplete="off"
+              ref={searchInputRef}
+              onFocus={() => setInputFocused(true)} // 포커스 시 작동
+              onBlur={() => setInputFocused(false)} // 포커스 해제 시
+            ></input>
+            {showSearchDiv &&
+              (localFilterFollowing.length > 0 ? (
+                <div className={style.searchDiv} ref={filterFollowingRef}>
+                  {localFilterFollowing.map((obj, key) => {
+                    return (
+                      <div key={key} className={style.following_div}>
+                        <p>{obj.following.name}</p>
+                        <p>팔로워: &nbsp;{obj.following.followers.length}명</p>
+                      </div>
+                    );
+                  })}
+                  <div className={style.search_result}>
+                    <img src="/img/search_img.png" alt="검색 이미지" />
+                    <p>{debounceSearchText}&nbsp;에 대한 검색 결과</p>
+                  </div>
+                  {searchServerUser.map((obj, key) => {
                     return (
                       <div key={key} className={style.following_div}>
                         <p>{obj.name}</p>
                         <p>팔로워: &nbsp;{obj.followers?.length}명</p>
                       </div>
                     );
-                  })
-                ) : (
-                  <div>
-                    <p>검색 결과가 없습니다!</p>
-                  </div>
-                )}
-                <p className={style.more_search} onClick={moreSearchList}>
-                  더보기
-                </p>
-              </div>
-            ))}
-        </span>
-      </div>
-    </header>
+                  })}
+                  <p className={style.more_search} onClick={moreSearchList}>
+                    더보기
+                  </p>
+                </div>
+              ) : (
+                <div className={style.searchDiv} ref={filterFollowingRef}>
+                  <p>팔로우 목록이 없습니다</p>
+                  <p>{debounceSearchText}&nbsp;에 대한 검색 결과</p>
+                  {searchServerUser.length > 0 ? (
+                    searchServerUser.map((obj, key) => {
+                      return (
+                        <div key={key} className={style.following_div}>
+                          <p>{obj.name}</p>
+                          <p>팔로워: &nbsp;{obj.followers?.length}명</p>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div>
+                      <p>검색 결과가 없습니다!</p>
+                    </div>
+                  )}
+                  <p className={style.more_search} onClick={moreSearchList}>
+                    더보기
+                  </p>
+                </div>
+              ))}
+          </span>
+        </div>
+      </header>
+    </>
   );
 }
 
