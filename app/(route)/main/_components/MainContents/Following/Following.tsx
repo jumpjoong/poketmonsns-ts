@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import FollowList from "./_components/FollowList";
 import { fetchPosts } from "@/app/_store/postsSlice";
 import { Author } from "@/app/_types/userType";
+import { fetchFollow } from "@/app/_store/followSlice";
 
 function Following() {
   const user = useAppSelector(state => state.user.user);
@@ -62,7 +63,9 @@ function Following() {
     };
     fetchAndMergeResults();
     return () => {
-      dispatch(fetchPosts());
+      if (user) {
+        dispatch(fetchFollow(user.id));
+      }
     };
   }, [searchQuery, user]);
 
