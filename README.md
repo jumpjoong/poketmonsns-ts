@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+### 설명
+#### App Router 기반
+<br/>
 
-## Getting Started
+#### Pages
+|페이지 명|역할|
+|:---|:---|
+|(Route)/page|로그인 페이지|
+|(Route)/main/page|로그인 후 보여지는 화면|
+<br/>
 
-First, run the development server:
+#### (Route)/main/
+|컴포넌트 명|역할|
+|:---|:---|
+|_components/Headmeta.tsx|메타태그 변경 (탭 이름)|
+|_components/Header|헤더|
+|_components/Loading|로딩 컴포넌트|
+|_components/Maincontents|로그인 후 컨텐츠 출력 위치|
+|_components/Nav|좌측 네비게이션 (메뉴)|
+|_components/Profile|프로필|
+<br/>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### 각 컴포넌트 폴더 구조
+|폴더명|역할|
+|:--|:--|
+|Header/Header|헤더 구조|
+|Loading/Loding|로딩 컴포넌트|
+|MainContents/MainContents.tsx|메인 콘텐츠 출력|
+|MainContents/Board|게시글|
+|MainContents/EditProfile|프로필 수정|
+|MainContents/Encyclopedia|포켓몬도감|
+|MainContents/Following|팔로우 목록|
+|MainContents/MyPost|내가 작성한 글|
+|MainContents/Trend|인기 글|
+|MainContents/Tutorial|튜토리얼|
+|MainContents/Write|작성하기|
+|Nav/Nav|좌측 네비게이션|
+|Profile/Profile|우측 프로필|
