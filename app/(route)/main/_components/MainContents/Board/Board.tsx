@@ -3,7 +3,6 @@ import { fetchPosts } from "@/app/_store/postsSlice";
 import React, { useEffect, useState } from "react";
 import style from "@/_styles/board.module.scss";
 import Posts from "./_components/Posts";
-import { useUserFollowHandler } from "@/app/_hooks/useUserFollowHandler";
 import Loading from "../../Loading/Loading";
 
 type BoardProps = {
@@ -44,14 +43,18 @@ function Board({ onEdit }: BoardProps) {
           <button
             className={followControl ? style.on : ""}
             type="button"
-            onClick={() => setFollowControl(true)}
+            onClick={() => {
+              setFollowControl(true), setInfoMode(null);
+            }}
           >
             전체
           </button>
           <button
             className={followControl ? "" : style.on}
             type="button"
-            onClick={() => setFollowControl(false)}
+            onClick={() => {
+              setFollowControl(false), setInfoMode(null);
+            }}
           >
             팔로우
           </button>

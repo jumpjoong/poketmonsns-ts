@@ -16,7 +16,6 @@ function FollowList({ following }: favoriteUserType) {
   const [followList, setFollowList] = useState(
     localFollowList.some(obj => obj.following.id === following.id)
   );
-  const userFollowHandler = useUserFollowHandler();
 
   const followHandler = async (following: Author) => {
     setFollowList(!followList);
