@@ -35,7 +35,7 @@ function Tutorial() {
           accessToken: session.user.accessToken,
         })
       );
-      dispatch(setContent("Board"));
+      dispatch(setContent("소식"));
     }
   };
 

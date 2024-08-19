@@ -3,7 +3,6 @@ import { fetchPosts } from "@/app/_store/postsSlice";
 import React, { useEffect, useState } from "react";
 import style from "@/_styles/board.module.scss";
 import Posts from "./_components/Posts";
-import { setInitialLocalFollowing } from "@/app/_store/followSlice";
 import { useUserFollowHandler } from "@/app/_hooks/useUserFollowHandler";
 import Loading from "../../Loading/Loading";
 
@@ -14,16 +13,13 @@ type BoardProps = {
 function Board({ onEdit }: BoardProps) {
   const user = useAppSelector(state => state.user.user);
   const posts = useAppSelector(state => state.posts);
-  const followingUser = useAppSelector(state => state.following);
   const localFollow = useAppSelector(
     state => state.localFollowReducer.following
   );
   const userStatus = useAppSelector(state => state.user.status);
   const [followControl, setFollowControl] = useState(true); //전체글, 팔로우 글
   const [infoMode, setInfoMode] = useState<Number | null>(null); //점자 컨트롤
-
   const dispatch = useAppDispatch();
-  const userFollowHandler = useUserFollowHandler();
 
   const toggleInfoMode = (postId: number) => {
     setInfoMode(prevId => (prevId === postId ? null : postId));
@@ -31,15 +27,9 @@ function Board({ onEdit }: BoardProps) {
 
   useEffect(() => {
     if (user) {
-      dispatch(fetchPosts(user.id));
+      dispatch(fetchPosts());
     }
-  }, [dispatch, user]);
-  useEffect(() => {
-    //초깃값 설정하는 대체제를 이거보다 좋은 방법을 모르겠음...
-    if (followingUser.status === "succeeded") {
-      dispatch(setInitialLocalFollowing(followingUser.userFollowing));
-    }
-  }, [followingUser]);
+  }, [user]);
   if (
     posts.posts === null ||
     posts.status === "loading" ||
@@ -79,7 +69,6 @@ function Board({ onEdit }: BoardProps) {
                 isFollow={localFollow.some(
                   obj => obj.following_id === posts.user_id
                 )}
-                userFollowHandler={userFollowHandler}
                 onEdit={onEdit}
                 infoMode={infoMode === posts.id}
                 toggleInfoMode={() => toggleInfoMode(posts.id)}
@@ -97,7 +86,6 @@ function Board({ onEdit }: BoardProps) {
                   posts={posts}
                   key={posts.id}
                   isFollow={true}
-                  userFollowHandler={userFollowHandler}
                   infoMode={infoMode === posts.id}
                   toggleInfoMode={() => toggleInfoMode(posts.id)}
                 />

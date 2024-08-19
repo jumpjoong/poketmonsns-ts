@@ -216,7 +216,7 @@ function Header() {
           </div>
         </div>
         <div className={style.status}>
-          {content === "Noob" || content === "소식" ? (
+          {content === "튜토리얼" || content === "소식" ? (
             <div className={style.margin_dummy}></div>
           ) : (
             <div className={style.status_arrow_container}>

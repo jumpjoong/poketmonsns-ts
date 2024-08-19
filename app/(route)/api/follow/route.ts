@@ -1,5 +1,47 @@
 import prisma from "prisma/prisma";
 
+export async function GET(req: Request) {
+  const searchParams = new URL(req.url).searchParams;
+  const userId = Number(searchParams.get("userId"));
+  const serverFollow = await prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      following: {
+        include: {
+          following: {
+            select: {
+              id: true,
+              email: true,
+              pro_img: true,
+              name: true,
+              rep: true,
+              rep_motion_url: true,
+              credit: true,
+              badge_list: true,
+              followers: {
+                include: {
+                  follower: {
+                    select: {
+                      id: true,
+                      name: true,
+                      email: true,
+                      pro_img: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  return new Response(
+    JSON.stringify({
+      userFollowing: serverFollow?.following || [],
+    })
+  );
+}
 export async function POST(req: Request) {
   const body = await req.json();
   const { following_id, follower_id } = body;

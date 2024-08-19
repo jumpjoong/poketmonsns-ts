@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "./hooks";
 import { localUnfollow, updateLocalFollow } from "../_store/followSlice";
-import { follow, unfollow } from "../_store/postsSlice";
 import { Author } from "../_types/userType";
 
 export const useUserFollowHandler = () => {
@@ -12,7 +11,6 @@ export const useUserFollowHandler = () => {
 
   const userFollowHandler = async (
     postsUserId: number,
-    postsId: number,
     postsUserData: Author
   ) => {
     await fetch(`/api/follow`, {
@@ -29,22 +27,12 @@ export const useUserFollowHandler = () => {
 
     if (isFollowing) {
       //언팔
-      const updatedLocalFollowing = localFollow.filter(
-        follow => follow.following_id !== postsUserId
-      );
       dispatch(localUnfollow({ followingId: postsUserId }));
       //팔로우 리스트 컴포넌트에서 사용 중이여서 store값도 업데이트 해줘야함
-      dispatch(
-        unfollow({
-          userId: user!.id,
-          followingId: postsUserId,
-          updatedLocalFollowing,
-        })
-      );
     } else {
       //팔로우 로직 following.followers 추가 이유 = 인풋창에 검색 시 팔로워가 적용이 안됨
       const followData = {
-        id: postsId,
+        id: postsUserId,
         follower_id: user!.id,
         following_id: postsUserId,
         following: {
@@ -59,17 +47,8 @@ export const useUserFollowHandler = () => {
           ],
         },
       };
-      console.log(postsUserData);
       const updatedLocalFollowing = [...localFollow, followData];
       dispatch(updateLocalFollow(updatedLocalFollowing));
-      //팔로우 리스트 컴포넌트에서 사용 중이여서 store값도 업데이트 해줘야함
-      dispatch(
-        follow({
-          userId: user?.id,
-          followingId: postsUserId,
-          updatedLocalFollowing,
-        })
-      );
     }
   };
   return userFollowHandler;
