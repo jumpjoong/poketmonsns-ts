@@ -1,12 +1,12 @@
 import { Author, FollowingType } from "./userType";
 
-//postsSlice.tsx
+//postsSlice.ts
 export interface PostsState {
-  posts: Posts[] | null;
+  posts: Posts[] | [];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null | undefined;
 }
-//postsSlice.tsx // followinitial
+// followSlice.ts
 export interface FollowState {
   userFollowing: FollowingType[];
   status: "idle" | "loading" | "succeeded" | "failed";

@@ -6,6 +6,7 @@ import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { setContent } from "@/app/_store/mainContentsSlice";
 import { setSearchQuery } from "@/app/_store/searchUserName";
+import { fetchFollow } from "@/app/_store/followSlice";
 
 function Profile() {
   const user = useAppSelector(state => state.user.user);
@@ -58,6 +59,7 @@ function Profile() {
 
   useEffect(() => {
     if (user && user.my_poketmon) {
+      dispatch(fetchFollow(user.id));
       const pokeId = user.my_poketmon.map(obj => obj.poke_id);
       setMylist(pokeId);
       setBadgeList(user.badge_list);

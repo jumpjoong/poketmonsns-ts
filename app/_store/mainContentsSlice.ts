@@ -6,7 +6,7 @@ interface MainContentsState {
 }
 
 const initialState: MainContentsState = {
-  current: "",
+  current: "소식",
   history: [],
 };
 
@@ -27,59 +27,8 @@ const mainContentsSlice = createSlice({
         state.current = previousContent; // 이전 상태로 복구
       }
     },
-    // selectsBoard: state => {
-    //   state.history.push(state.current);
-    //   state.current = "Board";
-    // },
-    // selectsTrend: state => {
-    //   state.history.push(state.current);
-    //   state.current = "Trend";
-    // },
-    // selectsEncyclopedia: state => {
-    //   state.history.push(state.current);
-    //   state.current = "Encyclopedia";
-    // },
-    // selectsMyPosts: state => {
-    //   state.history.push(state.current);
-    //   state.current = "MyPost";
-    // },
-    // selectsWrite: state => {
-    //   state.history.push(state.current);
-    //   state.current = "Write";
-    // },
-    // selectsEditProfile: state => {
-    //   state.history.push(state.current);
-    //   state.current = "EditProfile";
-    // },
-    // selectsFollowing: state => {
-    //   state.history.push(state.current);
-    //   state.current = "Following";
-    // },
-    // selectsNoob: state => {
-    //   state.history.push(state.current);
-    //   state.current = "Noob";
-    // },
-    // selectsBoard: () => "Board",
-    // selectsTrend: () => "Trend",
-    // selectsEncyclopedia: () => "Encyclopedia",
-    // selectsMyPosts: () => "MyPost",
-    // selectsWrite: () => "Write",
-    // selectsEditProfile: () => "EditProfile",
-    // selectsFollowing: () => "Following",
-    // selectsNoob: () => "Noob",
   },
 });
 
 export default mainContentsSlice.reducer;
-export const {
-  // selectsBoard,
-  // selectsTrend,
-  // selectsEncyclopedia,
-  // selectsMyPosts,
-  // selectsWrite,
-  // selectsEditProfile,
-  // selectsFollowing,
-  // selectsNoob,
-  goBack,
-  setContent,
-} = mainContentsSlice.actions;
+export const { goBack, setContent } = mainContentsSlice.actions;

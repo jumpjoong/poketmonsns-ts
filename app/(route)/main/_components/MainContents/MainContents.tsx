@@ -7,7 +7,6 @@ import Encyclopedia from "./Encyclopedia/Encyclopedia";
 import MyPosts from "./MyPosts/MyPosts";
 import Write from "./Write/Write";
 import Board from "./Board/Board";
-// import { selectsNoob, selectsWrite } from "@/app/_store/mainContentsSlice";
 import EditProfile from "./EditProfile/EditProfile";
 import Following from "./Following/Following";
 import Tutorial from "./Tutorial/Tutorial";
@@ -25,7 +24,7 @@ function MainContents() {
   const [editMode, setEditMode] = useState(false);
 
   const handleEdit = (PostId: number, content: string, mode: string) => {
-    dispatch(setContent("Write"));
+    dispatch(setContent("글쓰기"));
     setEditPost({ PostId, content });
     if (mode === "editMode") {
       setEditMode(true);
@@ -35,7 +34,7 @@ function MainContents() {
   useEffect(() => {
     //user정보가 업데이트 될 때 무조건 idle > loading > 실패, 성공
     if (user?.noob && userStatus === "succeeded") {
-      dispatch(setContent("Noob"));
+      dispatch(setContent("튜토리얼"));
     }
   }, [user, navSelectors]);
 
@@ -69,7 +68,7 @@ function MainContents() {
     case "팔로잉": {
       return <Following />;
     }
-    case "Noob": {
+    case "튜토리얼": {
       return <Tutorial />;
     }
     default:

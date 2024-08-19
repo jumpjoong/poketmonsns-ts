@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import style from "@/_styles/followlist.module.scss";
 import { Author } from "@/app/_types/userType";
 import { useAppSelector } from "@/app/_hooks/hooks";
+import { useUserFollowHandler } from "@/app/_hooks/useUserFollowHandler";
 
 interface favoriteUserType {
   following: Author;
@@ -15,6 +16,7 @@ function FollowList({ following }: favoriteUserType) {
   const [followList, setFollowList] = useState(
     localFollowList.some(obj => obj.following.id === following.id)
   );
+  const userFollowHandler = useUserFollowHandler();
 
   const followHandler = async (following: Author) => {
     setFollowList(!followList);

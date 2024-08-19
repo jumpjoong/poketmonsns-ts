@@ -6,15 +6,21 @@ import { Author } from "@/app/_types/userType";
 
 function Following() {
   const user = useAppSelector(state => state.user.user);
-  const userFollowing = useAppSelector(state => state.following.userFollowing);
+  const userFollowing = useAppSelector(
+    state => state.serverFollow.userFollowing
+  );
+  const localFollowing = useAppSelector(
+    state => state.localFollowReducer.following
+  );
   const searchQuery = useAppSelector(state => state.searchUserName.searchQuery);
   const [displayUser, setDisplayUsers] = useState<Author[]>([]);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     const fetchAndMergeResults = async () => {
       if (searchQuery.trim() === "") {
         // 검색어가 없으면 기존 팔로잉 목록 사용
-        setDisplayUsers(userFollowing.map(obj => obj.following));
+        setDisplayUsers(localFollowing.map(obj => obj.following));
         return;
       } else {
         try {
@@ -56,11 +62,11 @@ function Following() {
     };
     fetchAndMergeResults();
     return () => {
-      dispatch(fetchPosts(user!.id));
+      dispatch(fetchPosts());
     };
   }, [searchQuery, user]);
 
-  if (userFollowing.length === 0) {
+  if (localFollowing.length === 0) {
     return <p>팔로우한 유저가 없습니다</p>;
   } else {
     return displayUser.map(following => {

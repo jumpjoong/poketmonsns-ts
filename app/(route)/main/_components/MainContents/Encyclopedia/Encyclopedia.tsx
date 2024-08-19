@@ -48,6 +48,7 @@ function Encyclopedia() {
       window.alert("구매하실 수 없습니다!");
       dispatch(poketBuyModalHandler());
     } else {
+      //크레딧이 충분하여 구매 가능 로직
       const updateCredit = user && user?.credit - selectPoketmon.credit;
       //have_poke에 행 추가
       await fetch(`/api/encyclopedia`, {

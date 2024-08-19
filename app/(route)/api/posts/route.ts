@@ -1,43 +1,38 @@
 import prisma from "prisma/prisma";
 
 export async function GET(req: Request) {
-  const searchParams = new URL(req.url).searchParams;
-  const userId = Number(searchParams.get("userId"));
-
-  const [allPosts, user] = await Promise.all([
-    prisma.posts.findMany({
-      orderBy: {
-        date: "desc",
-      },
-      include: {
-        like_post: true,
-        author: {
-          //추가 이유: 팔로우 클릭하고 검색창 클릭 시 follow의 값이 store에 저장이 안되서 추가함
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            pro_img: true,
-            followers: true,
-            following: {
-              include: {
-                following: {
-                  select: {
-                    pro_img: true,
-                    name: true,
-                    rep: true,
-                    rep_motion_url: true,
-                    credit: true,
-                    badge_list: true,
-                    followers: {
-                      include: {
-                        follower: {
-                          select: {
-                            id: true,
-                            name: true,
-                            email: true,
-                            pro_img: true,
-                          },
+  const allPosts = await prisma.posts.findMany({
+    orderBy: {
+      date: "desc",
+    },
+    include: {
+      like_post: true,
+      author: {
+        //추가 이유: 팔로우 클릭하고 검색창 클릭 시 follow의 값이 store에 저장이 안되서 추가함
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          pro_img: true,
+          followers: true,
+          following: {
+            include: {
+              following: {
+                select: {
+                  pro_img: true,
+                  name: true,
+                  rep: true,
+                  rep_motion_url: true,
+                  credit: true,
+                  badge_list: true,
+                  followers: {
+                    include: {
+                      follower: {
+                        select: {
+                          id: true,
+                          name: true,
+                          email: true,
+                          pro_img: true,
                         },
                       },
                     },
@@ -48,45 +43,11 @@ export async function GET(req: Request) {
           },
         },
       },
-    }),
-    prisma.user.findUnique({
-      where: { id: userId },
-      include: {
-        following: {
-          include: {
-            following: {
-              select: {
-                id: true,
-                email: true,
-                pro_img: true,
-                name: true,
-                rep: true,
-                rep_motion_url: true,
-                credit: true,
-                badge_list: true,
-                followers: {
-                  include: {
-                    follower: {
-                      select: {
-                        id: true,
-                        name: true,
-                        email: true,
-                        pro_img: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    }),
-  ]);
+    },
+  });
   return new Response(
     JSON.stringify({
-      posts: allPosts,
-      userFollowing: user?.following || [],
+      allPosts,
     })
   );
 }

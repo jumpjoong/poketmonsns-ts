@@ -12,7 +12,9 @@ type BoardProps = {
 function Trend({ onEdit }: BoardProps) {
   const user = useAppSelector(state => state.user.user);
   const posts = useAppSelector(state => state.posts.posts);
-  const followingUser = useAppSelector(state => state.following.userFollowing);
+  const followingUser = useAppSelector(
+    state => state.serverFollow.userFollowing
+  );
   const [render, setRender] = useState(false);
   const [infoMode, setInfoMode] = useState<Number | null>(null); //점자 컨트롤
   const userFollowHandler = useUserFollowHandler();
@@ -26,7 +28,7 @@ function Trend({ onEdit }: BoardProps) {
     //비동기 처리하니 내가 원하는 로직이 나오긴 함..다만 생각보다 더 느릴 뿐..
     const test = async () => {
       if (user && posts !== null) {
-        await dispatch(fetchPosts(user.id));
+        await dispatch(fetchPosts());
       }
       setRender(true);
     };
