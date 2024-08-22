@@ -95,7 +95,7 @@ const EditProfile = () => {
             accessToken: session.user.accessToken,
           })
         );
-        dispatch(setContent("Board"));
+        dispatch(setContent("소식"));
       } else {
         alert("다시 로그인 해주세요!");
         window.location.replace("/");
@@ -148,10 +148,10 @@ const EditProfile = () => {
         <div className={style.profile_img_wrap}>
           <img
             src={`/img/poke_profile_img/pokballpixel-${initialProfileImg}.png`}
-            alt=""
+            alt="포켓볼 이미지"
           ></img>
           <div className={style.profile_img_mod} onClick={profileImgMod}>
-            <img src="/img/svg/pencil.svg" alt=""></img>
+            <img src="/img/svg/pencil.svg" alt="수정 이미지"></img>
           </div>
 
           <div
@@ -165,7 +165,7 @@ const EditProfile = () => {
               className={style.img_mod_toggle_exit}
               onClick={() => setProfileImgToggle(false)}
             >
-              <img src="/img/svg/cancel.svg" alt=""></img>
+              <img src="/img/svg/cancel.svg" alt="취소 이미지"></img>
             </div>
             <div className={style.img_mod_list}>
               {profileImgArr &&
@@ -176,7 +176,10 @@ const EditProfile = () => {
                       className={style.img_mod_img_wrap}
                       onClick={() => profileImgSelect(k)}
                     >
-                      <img src={`/img/poke_profile_img/${img}`} alt=""></img>
+                      <img
+                        src={`/img/poke_profile_img/${img}`}
+                        alt="프로필 뱃지 이미지"
+                      ></img>
                     </div>
                   );
                 })}
@@ -187,7 +190,7 @@ const EditProfile = () => {
           <div className={style.profile_info_name}>
             <p>{confirmNickName}</p>
             <div className={style.profile_name_mod} onClick={profileNameMod}>
-              <img src="/img/svg/pencil.svg" alt=""></img>
+              <img src="/img/svg/pencil.svg" alt="수정 이미지"></img>
             </div>
           </div>
           <div className={style.profile_info_email}>{user.email}</div>
@@ -240,7 +243,7 @@ const EditProfile = () => {
     );
   } else {
     <div className={style.myprofile_load}>
-      <img src="/img/loadimg/pika_heart.webp" alt=""></img>
+      <img src="/img/loadimg/pika_heart.webp" alt="로딩 이미지"></img>
     </div>;
   }
 };

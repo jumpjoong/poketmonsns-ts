@@ -1,37 +1,6 @@
 import { verifyJwt } from "@/app/_lib/jwt/jwt";
 import prisma from "prisma/prisma";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const accessToken = req.headers.get("authorization");
-    if (!accessToken || !verifyJwt(accessToken)) {
-      return new Response(JSON.stringify({ error: "No Author" }), {
-        status: 401,
-      });
-    }
-    const id = Number(params.id);
-    const userPosts = await prisma.posts.findMany({
-      where: {
-        user_id: id,
-      },
-      include: {
-        author: {
-          select: {
-            email: true,
-            name: true,
-          },
-        },
-      },
-    });
-    return new Response(JSON.stringify(userPosts));
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 export async function DELETE(
   req: Request,
   { params }: { params: { id: number } }

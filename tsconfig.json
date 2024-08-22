@@ -12,8 +12,6 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    // "outDir": "./dist",
-    // "rootDir": "./app",
     "plugins": [
       {
         "name": "next"
@@ -25,7 +23,9 @@
       "@/_styles/*": ["app/_styles/*"],
       "@/_store/*": ["app/_store/*"],
       "@/_types/*": ["app/_types/*"],
-      "@/_hooks/*": ["app/_hooks/*"]
+      "@/_hooks/*": ["app/_hooks/*"],
+      "@/_lib/*": ["app/_lib/*"],
+      "@/_components/*": ["app/(route)/main/_components/*"]
     }
   },
   "include": [

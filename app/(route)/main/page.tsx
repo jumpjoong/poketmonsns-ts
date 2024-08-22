@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import MainContents from "./_components/MainContents/MainContents";
-import style from "../../_styles/mainContentsWrap.module.scss";
+import MainContents from "@/_components/MainContents/MainContents";
+import style from "@/_styles/mainContentsWrap.module.scss";
 
 function Main() {
   return (

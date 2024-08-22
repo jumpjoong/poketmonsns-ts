@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import style from "@/_styles/followlist.module.scss";
 import { Author } from "@/app/_types/userType";
 import { useAppSelector } from "@/app/_hooks/hooks";
-import { useUserFollowHandler } from "@/app/_hooks/useUserFollowHandler";
 
 interface favoriteUserType {
   following: Author;

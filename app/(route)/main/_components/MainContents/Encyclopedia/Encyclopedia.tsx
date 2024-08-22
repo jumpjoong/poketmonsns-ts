@@ -6,13 +6,13 @@ import {
   resetMoreDetail,
   resetPoketBuyModalHandler,
 } from "@/app/_store/encyclopediaSlice";
+import style from "@/_styles/encyclopedia.module.scss";
+import { useInView } from "react-intersection-observer";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import { poketmonType } from "@/app/_types/encyclopedia";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useInView } from "react-intersection-observer";
-import PoketmonStatus from "./_components/PoketmonStatus";
-import Poketmon from "./_components/Poketmon";
-import style from "@/_styles/encyclopedia.module.scss";
+import PoketmonStatus from "@/_components/MainContents/Encyclopedia/_components/PoketmonStatus";
+import Poketmon from "@/_components/MainContents/Encyclopedia/_components/Poketmon";
 
 function Encyclopedia() {
   const [refView, inView] = useInView();

@@ -1,11 +1,11 @@
 "use client";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import style from "@/app/_styles/header.module.scss";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { ManageAccounts } from "@mui/icons-material";
-import style from "@/app/_styles/header.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
-import { FollowerDetailType } from "@/app/_types/userType";
 import { useDebounce } from "@/_hooks/debounce";
+import { FollowerDetailType } from "@/app/_types/userType";
 import { goBack, setContent } from "@/app/_store/mainContentsSlice";
 import { setSearchQuery } from "@/app/_store/searchUserName";
 import { signOut } from "next-auth/react";

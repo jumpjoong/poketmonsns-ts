@@ -2,7 +2,7 @@ import { Author, FollowingType } from "./userType";
 
 //postsSlice.ts
 export interface PostsState {
-  posts: Posts[] | [];
+  posts: Post[] | [];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null | undefined;
 }
@@ -14,10 +14,10 @@ export interface FollowState {
 }
 //Posts.tsx
 export interface PostsProps {
-  posts: Posts;
+  posts: Post;
 }
 
-export interface Posts {
+export interface Post {
   id: number;
   user_id: number;
   content: string;

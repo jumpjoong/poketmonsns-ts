@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import style from "@/_styles/posts.module.scss";
-import { useAppDispatch, useAppSelector } from "@/_hooks/hooks";
-import { useSession } from "next-auth/react";
+import Image from "next/image";
 import moment from "moment-timezone";
+import { useSession } from "next-auth/react";
+import { useAppDispatch, useAppSelector } from "@/_hooks/hooks";
 import { PostsProps } from "@/_types/postsType";
 import { fetchPosts } from "@/app/_store/postsSlice";
 import { fetchUser } from "@/app/_store/userSlice";
-import Image from "next/image";
 import { useUserFollowHandler } from "@/app/_hooks/useUserFollowHandler";
 
 interface AddIsFollow extends PostsProps {
@@ -34,7 +34,7 @@ const Posts = ({
   const date = moment(posts.date).utc().tz("Asia/Seoul").fromNow();
   const userFollowHandler = useUserFollowHandler();
   const dispatch = useAppDispatch();
-
+  console.log(infoMode);
   const likeHandler = async () => {
     // 좋아요 컨트롤
     const response = await fetch(`/api/likecount`, {
@@ -61,7 +61,7 @@ const Posts = ({
   const dataDelete = async () => {
     //글 삭제
     await fetch(`/api/posts`, {
-      method: "POST",
+      method: "DELETE",
       body: JSON.stringify({
         posts_id: posts.id,
         posts_user_id: posts.user_id,

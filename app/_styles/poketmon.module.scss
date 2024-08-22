@@ -13,9 +13,9 @@
   &:nth-child(4n) {
     border-right: none;
   }
-  &:nth-last-child(-n + 3) {
-    border-bottom: none;
-  }
+  // &:nth-last-child(-n + 3) {
+  //   border-bottom: none;
+  // }
 
   .card_img_wrap {
     img {
