@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { signOut } from "next-auth/react";
 import style from "@/app/_styles/profile.module.scss";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
-import { signOut } from "next-auth/react";
-import Image from "next/image";
 import { setContent } from "@/app/_store/mainContentsSlice";
 import { setSearchQuery } from "@/app/_store/searchUserName";
 import { fetchFollow } from "@/app/_store/followSlice";

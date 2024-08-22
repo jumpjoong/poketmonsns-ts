@@ -2,8 +2,10 @@ import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import { fetchPosts } from "@/app/_store/postsSlice";
 import React, { useEffect, useState } from "react";
 import style from "@/_styles/board.module.scss";
-import Posts from "./_components/Posts";
-import Loading from "../../Loading/Loading";
+import Posts from "@/_components/MainContents/Board/_components/Posts";
+import Loading from "@/_components/Loading/Loading";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { Post } from "@/app/_types/postsType";
 
 type BoardProps = {
   onEdit: (id: number, content: string, editMode: string) => void;
@@ -24,14 +26,36 @@ function Board({ onEdit }: BoardProps) {
     setInfoMode(prevId => (prevId === postId ? null : postId));
   };
 
-  useEffect(() => {
-    if (user) {
-      dispatch(fetchPosts());
-    }
-  }, [user]);
+  const fetchPost = async (pageParam: number) => {
+    const posts = await fetch(`/api/posts?page=${pageParam}&limit=10`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const res = await posts.json();
+    const { allPosts } = res;
+    return allPosts;
+  };
+
+  const { data, status, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    useInfiniteQuery({
+      queryKey: ["posts"],
+      queryFn: ({ pageParam = 1 }) => fetchPost(pageParam),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage, allPage) => {
+        return lastPage.length ? allPage.length + 1 : null;
+      },
+    });
+
+  // useEffect(() => {
+  //   if (user) {
+  //     dispatch(fetchPosts());
+  //   }
+  // }, [user]);
   if (
-    posts.posts === null ||
-    posts.status === "loading" ||
+    status === "pending" ||
+    status === "error" ||
     userStatus === null ||
     userStatus === "loading"
   ) {
@@ -60,23 +84,27 @@ function Board({ onEdit }: BoardProps) {
           </button>
         </div>
         <ul>
-          {posts.posts.length === 0 ? (
+          {status === "success" && data.pages.length === 0 ? (
             <li>글이 없습니다!</li>
           ) : followControl ? (
-            posts &&
-            posts.posts.map(posts => (
-              <Posts
-                posts={posts}
-                key={posts.id}
-                id={`post-${posts.id}`}
-                isFollow={localFollow.some(
-                  obj => obj.following_id === posts.user_id
-                )}
-                onEdit={onEdit}
-                infoMode={infoMode === posts.id}
-                toggleInfoMode={() => toggleInfoMode(posts.id)}
-              />
-            ))
+            data?.pages &&
+            data.pages.map(obj =>
+              obj.map((posts: Post) => {
+                return (
+                  <Posts
+                    posts={posts}
+                    key={posts.id}
+                    id={`post-${posts.id}`}
+                    isFollow={localFollow.some(
+                      obj => obj.following_id === posts.user_id
+                    )}
+                    onEdit={onEdit}
+                    infoMode={infoMode === posts.id}
+                    toggleInfoMode={() => toggleInfoMode(posts.id)}
+                  />
+                );
+              })
+            )
           ) : localFollow.length === 0 ? (
             <li>팔로잉을 한 사람이 없습니다! 팔로잉을 해주세요!</li>
           ) : (

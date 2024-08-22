@@ -1,9 +1,8 @@
-import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
-import { fetchPosts } from "@/app/_store/postsSlice";
 import React, { useEffect, useState } from "react";
-import Post from "../Board/_components/Posts";
-import { useUserFollowHandler } from "@/app/_hooks/useUserFollowHandler";
-import Loading from "../../Loading/Loading";
+import { useAppSelector } from "@/app/_hooks/hooks";
+import Post from "@/_components/MainContents/Board/_components/Posts";
+import Loading from "@/_components/Loading/Loading";
+import { Posts } from "@/app/_types/postsType";
 
 type BoardProps = {
   onEdit: (id: number, content: string, editMode: string) => void;
@@ -11,52 +10,52 @@ type BoardProps = {
 
 function Trend({ onEdit }: BoardProps) {
   const user = useAppSelector(state => state.user.user);
-  const posts = useAppSelector(state => state.posts.posts);
   const followingUser = useAppSelector(
-    state => state.serverFollow.userFollowing
+    state => state.localFollowReducer.following
   );
   const [render, setRender] = useState(false);
   const [infoMode, setInfoMode] = useState<Number | null>(null); //점자 컨트롤
-  const userFollowHandler = useUserFollowHandler();
-  const dispatch = useAppDispatch();
+  const [hotPosts, setHotPosts] = useState<Posts[]>([]);
 
   const toggleInfoMode = (postId: number) => {
     setInfoMode(prevId => (prevId === postId ? null : postId));
   };
 
   useEffect(() => {
-    //비동기 처리하니 내가 원하는 로직이 나오긴 함..다만 생각보다 더 느릴 뿐..
-    const test = async () => {
-      if (user && posts !== null) {
-        await dispatch(fetchPosts());
-      }
+    const fetchLikePosts = async () => {
+      const response = fetch(`/api/post-likes`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const res = await (await response).json();
+      const { hotPosts } = res;
+      setHotPosts(hotPosts);
       setRender(true);
     };
 
-    test();
+    fetchLikePosts();
   }, [user]);
+
   if (render === false) {
     return <Loading />;
-  } else if (posts !== null) {
-    return [...posts]
-      .sort((a, b) => b.like_count - a.like_count)
-      .slice(0, 5)
-      .map(posts => {
-        return (
-          <Post
-            posts={posts}
-            key={posts.id}
-            onEdit={onEdit}
-            isFollow={
-              followingUser.some(obj => obj.following_id === posts.user_id) ||
-              false
-            }
-            userFollowHandler={userFollowHandler}
-            infoMode={infoMode === posts.id}
-            toggleInfoMode={() => toggleInfoMode(posts.id)}
-          />
-        );
-      });
+  } else if (hotPosts.length !== 0) {
+    return hotPosts.map(posts => {
+      return (
+        <Post
+          posts={posts}
+          key={posts.id}
+          onEdit={onEdit}
+          isFollow={
+            followingUser.some(obj => obj.following_id === posts.user_id) ||
+            false
+          }
+          infoMode={infoMode === posts.id}
+          toggleInfoMode={() => toggleInfoMode(posts.id)}
+        />
+      );
+    });
   }
 }
 

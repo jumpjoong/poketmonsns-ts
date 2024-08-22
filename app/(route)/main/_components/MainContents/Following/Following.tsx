@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
 import React, { useEffect, useState } from "react";
-import FollowList from "./_components/FollowList";
-import { fetchPosts } from "@/app/_store/postsSlice";
+import FollowList from "@/_components/MainContents/Following/_components/FollowList";
 import { Author } from "@/app/_types/userType";
 import { fetchFollow } from "@/app/_store/followSlice";
 

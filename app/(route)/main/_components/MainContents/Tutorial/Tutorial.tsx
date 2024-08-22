@@ -1,8 +1,8 @@
+import React, { ChangeEvent, FormEvent, useState } from "react";
+import style from "@/_styles/tutorial.module.scss";
+import { useSession } from "next-auth/react";
 import { useAppDispatch } from "@/app/_hooks/hooks";
 import { setContent } from "@/app/_store/mainContentsSlice";
-import { useSession } from "next-auth/react";
-import style from "@/_styles/tutorial.module.scss";
-import React, { ChangeEvent, FormEvent, useState } from "react";
 import { fetchUser } from "@/app/_store/userSlice";
 
 function Tutorial() {

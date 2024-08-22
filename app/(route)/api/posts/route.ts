@@ -52,7 +52,7 @@ export async function GET(req: Request) {
   );
 }
 
-export async function POST(req: Request) {
+export async function DELETE(req: Request) {
   const body = await req.json();
   try {
     if (body.posts_user_id === body.user_id) {

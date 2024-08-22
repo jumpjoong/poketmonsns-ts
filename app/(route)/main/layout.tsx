@@ -1,11 +1,11 @@
 "use client";
 import { Props } from "@/app/_types/reactNode";
 import React, { useEffect } from "react";
-import style from "@/app/_styles/main.module.scss";
-import Nav from "./_components/Nav/Nav";
-import Header from "./_components/Header/Header";
-import Profile from "./_components/Profile/Profile";
 import { useSession } from "next-auth/react";
+import style from "@/app/_styles/main.module.scss";
+import Nav from "@/_components/Nav/Nav";
+import Header from "@/_components/Header/Header";
+import Profile from "@/_components/Profile/Profile";
 import { useAppDispatch } from "@/app/_hooks/hooks";
 import { fetchUser } from "@/app/_store/userSlice";
 

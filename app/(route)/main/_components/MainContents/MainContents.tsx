@@ -2,14 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
-import Trend from "./Trend/Trend";
-import Encyclopedia from "./Encyclopedia/Encyclopedia";
-import MyPosts from "./MyPosts/MyPosts";
-import Write from "./Write/Write";
-import Board from "./Board/Board";
-import EditProfile from "./EditProfile/EditProfile";
-import Following from "./Following/Following";
-import Tutorial from "./Tutorial/Tutorial";
+import Trend from "@/_components/MainContents/Trend/Trend";
+import Encyclopedia from "@/_components/MainContents/Encyclopedia/Encyclopedia";
+import MyPosts from "@/_components/MainContents/MyPosts/MyPosts";
+import Write from "@/_components/MainContents/Write/Write";
+import Board from "@/_components/MainContents/Board/Board";
+import EditProfile from "@/_components/MainContents/EditProfile/EditProfile";
+import Following from "@/_components/MainContents/Following/Following";
+import Tutorial from "@/_components/MainContents/Tutorial/Tutorial";
 import { setContent } from "@/app/_store/mainContentsSlice";
 
 function MainContents() {
@@ -49,7 +49,7 @@ function MainContents() {
       return <Encyclopedia />;
     }
     case "작성한 글": {
-      return <MyPosts />;
+      return <MyPosts onEdit={handleEdit} />;
     }
     case "글쓰기": {
       return editMode ? (
