@@ -6,12 +6,14 @@ import Posts from "@/_components/MainContents/Board/_components/Posts";
 import Loading from "@/_components/Loading/Loading";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Post } from "@/app/_types/postsType";
+import { useInView } from "react-intersection-observer";
 
 type BoardProps = {
   onEdit: (id: number, content: string, editMode: string) => void;
 };
 
 function Board({ onEdit }: BoardProps) {
+  const [refView, inView] = useInView();
   const user = useAppSelector(state => state.user.user);
   const posts = useAppSelector(state => state.posts);
   const localFollow = useAppSelector(
@@ -44,7 +46,11 @@ function Board({ onEdit }: BoardProps) {
       queryFn: ({ pageParam = 1 }) => fetchPost(pageParam),
       initialPageParam: 1,
       getNextPageParam: (lastPage, allPage) => {
-        return lastPage.length ? allPage.length + 1 : null;
+        if (lastPage.length < 10) {
+          //글의 갯수가 10개보다 적을 때 null 반환 >> 쿼리 작동 x
+          return null;
+        }
+        return allPage.length + 1;
       },
     });
 
@@ -53,6 +59,12 @@ function Board({ onEdit }: BoardProps) {
   //     dispatch(fetchPosts());
   //   }
   // }, [user]);
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
+
   if (
     status === "pending" ||
     status === "error" ||
@@ -101,6 +113,7 @@ function Board({ onEdit }: BoardProps) {
                     onEdit={onEdit}
                     infoMode={infoMode === posts.id}
                     toggleInfoMode={() => toggleInfoMode(posts.id)}
+                    innerRef={refView}
                   />
                 );
               })
@@ -119,6 +132,7 @@ function Board({ onEdit }: BoardProps) {
                   isFollow={true}
                   infoMode={infoMode === posts.id}
                   toggleInfoMode={() => toggleInfoMode(posts.id)}
+                  innerRef={refView}
                 />
               ))
           )}
