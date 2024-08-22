@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Ref, useState } from "react";
 import style from "@/_styles/posts.module.scss";
 import Image from "next/image";
 import moment from "moment-timezone";
@@ -15,6 +15,7 @@ interface AddIsFollow extends PostsProps {
   onEdit?: (id: number, content: string, editMode: string) => void;
   infoMode: boolean;
   toggleInfoMode: () => void;
+  innerRef: Ref<HTMLLIElement>;
 }
 
 const Posts = ({
@@ -24,6 +25,7 @@ const Posts = ({
   onEdit,
   infoMode,
   toggleInfoMode,
+  innerRef,
 }: AddIsFollow) => {
   const { data: session, status } = useSession();
   const user = useAppSelector(state => state.user.user);
@@ -34,7 +36,6 @@ const Posts = ({
   const date = moment(posts.date).utc().tz("Asia/Seoul").fromNow();
   const userFollowHandler = useUserFollowHandler();
   const dispatch = useAppDispatch();
-  console.log(infoMode);
   const likeHandler = async () => {
     // 좋아요 컨트롤
     const response = await fetch(`/api/likecount`, {
@@ -83,7 +84,7 @@ const Posts = ({
   return (
     user &&
     session && (
-      <li id={id} className={style.detail_list} key={posts.id}>
+      <li id={id} className={style.detail_list} key={posts.id} ref={innerRef}>
         <div className={style.profileInfo}>
           <div className={style.profile_info_wrap}>
             <div className={style.profile_img}>
