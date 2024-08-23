@@ -38,7 +38,7 @@ function Following() {
             const { matchingUser } = res;
             // 기존 팔로우 목록과 서버에서 가져온 목록 병합
             const combinedUsers = [
-              ...userFollowing.map(f => f.following),
+              ...localFollowing.map(f => f.following),
               ...matchingUser,
             ];
             const uniqueUsers: Author[] = Array.from(
@@ -51,6 +51,7 @@ function Following() {
                 }, new Map())
                 .values()
             );
+            console.log(uniqueUsers);
             setDisplayUsers(uniqueUsers);
           } else {
             console.error("검색 결과 없음");
@@ -68,7 +69,7 @@ function Following() {
     };
   }, [searchQuery, user]);
 
-  if (localFollowing.length === 0) {
+  if (displayUser.length === 0) {
     return <p>팔로우한 유저가 없습니다</p>;
   } else {
     return displayUser.map(following => {

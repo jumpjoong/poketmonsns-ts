@@ -15,14 +15,7 @@ interface newType {
   email: string;
   pro_img: string;
   name: string;
-  following: {
-    id: number;
-    email: string;
-    name: string;
-    pro_img: string;
-    followers: FollowerDetailType[];
-  };
-  followers?: FollowerDetailType[];
+  followers: FollowerDetailType[];
 }
 function Header() {
   const user = useAppSelector(state => state.user.user);
@@ -76,7 +69,7 @@ function Header() {
 
   const moreSearchList = () => {
     dispatch(setSearchQuery(search));
-    dispatch(setContent("Following"));
+    dispatch(setContent("팔로잉"));
     setLocalFilterFollowing([]);
     setShowSearchDiv(false);
   };
@@ -91,90 +84,22 @@ function Header() {
       }
 
       //inputFocused이 있는 이유 = 다시 포커스가 되면 searchDiv창이 나오게 설정
-      if (user && search !== "" && inputFocused) {
+      if (user && debounceSearchText !== "" && inputFocused) {
         //인풋창에 들어온 값을 토대로 store에 저장되어 있는 팔로우 목록을 찾음
-        const searchMyFollowing = follow.filter(obj =>
-          obj.following.name.includes(debounceSearchText)
-        );
-        //팔로우 목록과 서버에서 받은 값이 타입이 달라서 구조 분해로 맞춤
-        const localFollow = searchMyFollowing.map(obj => {
-          const { id, name, email, pro_img } = obj.following;
-          return {
-            id,
-            email,
-            pro_img,
-            name,
-            following: {
-              id: obj.following.id,
-              email: obj.following.email,
-              name: obj.following.name,
-              pro_img: obj.following.pro_img,
-              followers: obj.following.followers,
-            },
-          };
-        });
-        //팔로우 목록 있을 때의 로직
-        if (localFollow.length > 0) {
-          let followingCount = localFollow.length;
-
-          if (followingCount < 5) {
-            try {
-              const response = await fetch(
-                `/api/searchUsers?searchUserName=${debounceSearchText}&userId=${user.id}`
-              );
-              const data = await response.json();
-              const { matchingUser } = data as {
-                matchingUser: newType[];
-              };
-              //내 팔로우 목록과 서버에서 검색한 닉네임 가져와서 합침 *이 아래부터 수정 될 예정
-              const combinedUsers = [...localFollow, ...matchingUser];
-
-              // // 팔로우 목록과 서버에서 검색한 중복 검사 중복된 값은 전체 삭제
-              const removeDuplicates = (combinedUsers: newType[]) => {
-                // 각 followId의 발생 횟수를 추적하기 위한 맵 생성
-                const followIdCountMap = combinedUsers.reduce((map, curr) => {
-                  const followId = curr.id;
-                  if (followId) {
-                    map.set(followId, (map.get(followId) || 0) + 1); // followId의 발생 횟수를 증가
-                  }
-                  return map;
-                }, new Map<number, number>());
-
-                // 발생 횟수가 1인 followId만 남겨서 새로운 배열 생성
-                return combinedUsers.filter(curr => {
-                  const followId = curr.id;
-                  return followIdCountMap.get(followId) === 1; // 발생 횟수가 1인 경우만 포함
-                });
-              };
-              const test = removeDuplicates(combinedUsers);
-
-              setLocalFilterFollowing(localFollow);
-              setSearchServerUser(test);
-              setShowSearchDiv(true);
-            } catch (err) {
-              console.log(err);
-            }
-          } else {
-            // 팔로우 리스트가 5개 이상인 경우
-            setLocalFilterFollowing(localFollow.slice(0, 5));
-            setShowSearchDiv(true);
-          }
-        } else {
-          //팔로우 목록이 없을 때의 로직
-          try {
-            const response = await fetch(
-              `/api/searchUsers?searchUserName=${debounceSearchText}&userId=${user.id}`
-            );
-            const data = await response.json();
-            const { matchingUser } = data;
-
-            setSearchServerUser(matchingUser);
-            setShowSearchDiv(true);
-          } catch (error) {
-            console.error(error);
-          }
+        try {
+          const response = await fetch(
+            `/api/searchUsers?searchUserName=${debounceSearchText}&userId=${user.id}`
+          );
+          const data = await response.json();
+          console.log(data);
+          const { searchFollowUser, nonFollowUsers } = data;
+          setLocalFilterFollowing(searchFollowUser);
+          setSearchServerUser(nonFollowUsers);
+          setShowSearchDiv(true);
+        } catch (err) {
+          console.log(err);
         }
-      } else if (search === "" && !inputFocused) {
+      } else if (debounceSearchText === "" && !inputFocused) {
         //입력된 게 없고 inputFocused값이 false일 경우 전부 초기화
         setLocalFilterFollowing([]);
         setShowSearchDiv(false);
@@ -306,8 +231,8 @@ function Header() {
                   {localFilterFollowing.map((obj, key) => {
                     return (
                       <div key={key} className={style.following_div}>
-                        <p>{obj.following.name}</p>
-                        <p>팔로워: &nbsp;{obj.following.followers.length}명</p>
+                        <p>{obj.name}</p>
+                        <p>팔로워: &nbsp;{obj.followers.length}명</p>
                       </div>
                     );
                   })}
@@ -319,7 +244,7 @@ function Header() {
                     return (
                       <div key={key} className={style.following_div}>
                         <p>{obj.name}</p>
-                        <p>팔로워: &nbsp;{obj.followers?.length}명</p>
+                        <p>팔로워: &nbsp;{obj.followers.length}명</p>
                       </div>
                     );
                   })}
@@ -336,7 +261,7 @@ function Header() {
                       return (
                         <div key={key} className={style.following_div}>
                           <p>{obj.name}</p>
-                          <p>팔로워: &nbsp;{obj.followers?.length}명</p>
+                          <p>팔로워: &nbsp;{obj.followers.length}명</p>
                         </div>
                       );
                     })
