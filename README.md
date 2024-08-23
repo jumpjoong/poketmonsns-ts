@@ -1,5 +1,4 @@
-# 💡PoketMonSNS 
-## Next.js를 이용한 App Router 기반 프로젝트
+# 💡PoketMonSNS (Next.js를 이용한 App Router 기반 프로젝트)
 
 👇👇👇👇👇👇👇👇
 
