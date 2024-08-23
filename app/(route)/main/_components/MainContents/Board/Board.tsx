@@ -105,7 +105,6 @@ function Board({ onEdit }: BoardProps) {
           {status === "success" && data.pages.length === 0 ? (
             <li>글이 없습니다!</li>
           ) : followControl ? (
-            data?.pages &&
             data.pages.map(obj =>
               obj.map((posts: Post) => {
                 return (
