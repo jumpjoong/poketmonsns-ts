@@ -1,5 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/app/_hooks/hooks";
-import { fetchPosts } from "@/app/_store/postsSlice";
+import { useAppSelector } from "@/app/_hooks/hooks";
 import React, { useEffect, useState } from "react";
 import style from "@/_styles/board.module.scss";
 import Posts from "@/_components/MainContents/Board/_components/Posts";
@@ -15,21 +14,31 @@ type BoardProps = {
 function Board({ onEdit }: BoardProps) {
   const [refView, inView] = useInView();
   const user = useAppSelector(state => state.user.user);
-  const posts = useAppSelector(state => state.posts);
   const localFollow = useAppSelector(
     state => state.localFollowReducer.following
   );
   const userStatus = useAppSelector(state => state.user.status);
-  const [followControl, setFollowControl] = useState(true); //전체글, 팔로우 글
+  const [followControl, setFollowControl] = useState(true); //true: 전체글, false: 팔로우 글
   const [infoMode, setInfoMode] = useState<Number | null>(null); //점자 컨트롤
-  const dispatch = useAppDispatch();
 
   const toggleInfoMode = (postId: number) => {
     setInfoMode(prevId => (prevId === postId ? null : postId));
   };
 
-  const fetchPost = async (pageParam: number) => {
-    const posts = await fetch(`/api/posts?page=${pageParam}&limit=10`, {
+  const fetchPost = async ({
+    userId,
+    pageParam,
+  }: {
+    userId: number | null;
+    pageParam: number;
+  }) => {
+    let postUrl = `/api/posts?page=${pageParam}&limit=10`;
+
+    if (userId) {
+      postUrl = `/api/posts?userId=${userId}&page=${pageParam}&limit=10`;
+    }
+
+    const posts = await fetch(postUrl, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -42,8 +51,10 @@ function Board({ onEdit }: BoardProps) {
 
   const { data, status, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useInfiniteQuery({
-      queryKey: ["posts"],
-      queryFn: ({ pageParam = 1 }) => fetchPost(pageParam),
+      queryKey: ["posts", followControl],
+      queryFn: ({ pageParam = 1 }) => {
+        return fetchPost({ userId: followControl ? null : user.id, pageParam });
+      },
       initialPageParam: 1,
       getNextPageParam: (lastPage, allPage) => {
         if (lastPage.length < 10) {
@@ -54,11 +65,6 @@ function Board({ onEdit }: BoardProps) {
       },
     });
 
-  // useEffect(() => {
-  //   if (user) {
-  //     dispatch(fetchPosts());
-  //   }
-  // }, [user]);
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage();
@@ -121,11 +127,8 @@ function Board({ onEdit }: BoardProps) {
           ) : localFollow.length === 0 ? (
             <li>팔로잉을 한 사람이 없습니다! 팔로잉을 해주세요!</li>
           ) : (
-            posts.posts
-              .filter(posts =>
-                localFollow.some(obj => posts.user_id === obj.following_id)
-              )
-              .map(posts => (
+            data.pages.map(obj =>
+              obj.map((posts: Post) => (
                 <Posts
                   posts={posts}
                   key={posts.id}
@@ -135,6 +138,7 @@ function Board({ onEdit }: BoardProps) {
                   innerRef={refView}
                 />
               ))
+            )
           )}
         </ul>
       </div>

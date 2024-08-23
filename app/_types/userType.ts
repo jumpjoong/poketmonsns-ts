@@ -1,7 +1,7 @@
 import { LikePostType } from "./postsType";
 
 export interface UserState {
-  user: User | null;
+  user: User;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null | undefined;
 }

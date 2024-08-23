@@ -4,18 +4,15 @@ export async function GET(req: Request) {
   const searchParams = new URL(req.url).searchParams;
   const limit = searchParams.get("limit");
   const page = searchParams.get("page");
-  //null값일 경우 처리하는건데 차라리 null값이면 에러로 보여주는게 훨 나을듯?
+  //계산을 위한 number로 만들고 초깃값 설정
   const limitNumber = limit ? Number(limit) : 30;
   const pageNumber = page ? Number(page) : 1;
 
-  const validLimit = isNaN(limitNumber) ? 30 : limitNumber;
-  const validPage = isNaN(pageNumber) ? 1 : pageNumber;
-
-  const offset = (validPage - 1) * validLimit;
+  const offset = (pageNumber - 1) * limitNumber;
 
   const allPoketmon = await prisma.poke_table.findMany({
     skip: offset,
-    take: validLimit,
+    take: limitNumber,
   });
   return Response.json(allPoketmon);
 }
