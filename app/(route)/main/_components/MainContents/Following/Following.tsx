@@ -6,9 +6,6 @@ import { fetchFollow } from "@/app/_store/followSlice";
 
 function Following() {
   const user = useAppSelector(state => state.user.user);
-  const userFollowing = useAppSelector(
-    state => state.serverFollow.userFollowing
-  );
   const localFollowing = useAppSelector(
     state => state.localFollowReducer.following
   );
@@ -25,7 +22,7 @@ function Following() {
       } else {
         try {
           const response = await fetch(
-            `/api/searchUsers?searchUserName=${searchQuery}&userId=${user!.id}`,
+            `/api/searchUsers?searchUserName=${searchQuery}&userId=${user.id}`,
             {
               method: "GET",
               headers: {
@@ -35,24 +32,11 @@ function Following() {
           );
           if (response.ok) {
             const res = await response.json();
-            const { matchingUser } = res;
+            const { searchFollowUser } = res;
+            const { nonFollowUsers } = res;
             // 기존 팔로우 목록과 서버에서 가져온 목록 병합
-            const combinedUsers = [
-              ...localFollowing.map(f => f.following),
-              ...matchingUser,
-            ];
-            const uniqueUsers: Author[] = Array.from(
-              combinedUsers
-                .reduce((map, user) => {
-                  if (!map.has(user.id)) {
-                    map.set(user.id, user); // ID를 키로 사용자 객체를 저장
-                  }
-                  return map;
-                }, new Map())
-                .values()
-            );
-            console.log(uniqueUsers);
-            setDisplayUsers(uniqueUsers);
+            const combinedUsers = [...searchFollowUser, ...nonFollowUsers];
+            setDisplayUsers(combinedUsers);
           } else {
             console.error("검색 결과 없음");
           }
