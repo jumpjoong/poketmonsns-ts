@@ -91,7 +91,6 @@ function Header() {
             `/api/searchUsers?searchUserName=${debounceSearchText}&userId=${user.id}`
           );
           const data = await response.json();
-          console.log(data);
           const { searchFollowUser, nonFollowUsers } = data;
           setLocalFilterFollowing(searchFollowUser);
           setSearchServerUser(nonFollowUsers);
